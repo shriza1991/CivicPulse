@@ -1,0 +1,56 @@
+{
+  "IND": [
+    {
+      "country_code": "IND",
+      "region_code": "MH_MUM",
+      "ward_id": "WARD_MUM_M_EAST",
+      "ward_name": "Kurla / Dharavi M-East Ward",
+      "population_density": 38500.0,
+      "vulnerable_ratio": 0.48,
+      "poverty_rate": 0.35,
+      "primary_language": "hi",
+      "is_demo": true,
+      "source_attribution": "Census of India sample data (Enriched)"
+    },
+    {
+      "country_code": "IND",
+      "region_code": "MH_MUM",
+      "ward_id": "WARD_MUM_K_WEST",
+      "ward_name": "Andheri West K-West Ward",
+      "population_density": 22000.0,
+      "vulnerable_ratio": 0.22,
+      "poverty_rate": 0.15,
+      "primary_language": "mr",
+      "is_demo": true,
+      "source_attribution": "Census of India sample data (Enriched)"
+    }
+  ],
+  "BRA": [
+    {
+      "country_code": "BRA",
+      "region_code": "SP_SAO",
+      "ward_id": "DIST_SAO_HELIOPOLIS",
+      "ward_name": "Subprefeitura do Ipiranga / Heliópolis",
+      "population_density": 29000.0,
+      "vulnerable_ratio": 0.52,
+      "poverty_rate": 0.41,
+      "primary_language": "pt",
+      "is_demo": true,
+      "source_attribution": "IBGE Sample Census Data (Brazil)"
+    }
+  ],
+  "ZAF": [
+    {
+      "country_code": "ZAF",
+      "region_code": "GP_JHB",
+      "ward_id": "WARD_JHB_SOWETO_10",
+      "ward_name": "City of Johannesburg Ward 10 (Soweto)",
+      "population_density": 18500.0,
+      "vulnerable_ratio": 0.55,
+      "poverty_rate": 0.46,
+      "primary_language": "zu",
+      "is_demo": true,
+      "source_attribution": "Statistics South Africa (Stats SA) Sample Data"
+    }
+  ]
+}

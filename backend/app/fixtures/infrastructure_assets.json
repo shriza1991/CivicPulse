@@ -1,0 +1,47 @@
+{
+  "IND": [
+    {
+      "asset_id": "INFRA_IND_MUM_R01",
+      "ward_id": "WARD_MUM_M_EAST",
+      "asset_type": "Arterial Road Network",
+      "asset_name": "LBS Marg Transit Corridor",
+      "installation_year": 2008,
+      "estimated_lifespan_years": 15,
+      "last_inspected_date": "2024-03-15",
+      "design_capacity_daily": 50000,
+      "current_load_daily": 72000,
+      "condition_rating": "poor",
+      "is_demo": true
+    }
+  ],
+  "BRA": [
+    {
+      "asset_id": "INFRA_BRA_SAO_W01",
+      "ward_id": "DIST_SAO_HELIOPOLIS",
+      "asset_type": "Drainage & Stormwater Main",
+      "asset_name": "Canal do Ipiranga Drainage Trunk",
+      "installation_year": 1995,
+      "estimated_lifespan_years": 30,
+      "last_inspected_date": "2023-11-10",
+      "design_capacity_daily": 30000,
+      "current_load_daily": 45000,
+      "condition_rating": "critical",
+      "is_demo": true
+    }
+  ],
+  "ZAF": [
+    {
+      "asset_id": "INFRA_ZAF_JHB_E01",
+      "ward_id": "WARD_JHB_SOWETO_10",
+      "asset_type": "Substation & Streetlight Feeder",
+      "asset_name": "Soweto Zone 4 Feeder Substation",
+      "installation_year": 2002,
+      "estimated_lifespan_years": 25,
+      "last_inspected_date": "2024-01-20",
+      "design_capacity_daily": 20000,
+      "current_load_daily": 28000,
+      "condition_rating": "fair",
+      "is_demo": true
+    }
+  ]
+}

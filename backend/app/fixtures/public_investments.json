@@ -1,0 +1,44 @@
+{
+  "IND": [
+    {
+      "project_id": "INV_IND_MUM_P01",
+      "ward_id": "WARD_MUM_M_EAST",
+      "project_name": "Kurla Flyover Resurfacing & Drainage Upgrade",
+      "allocated_budget": 12500000.0,
+      "currency": "INR",
+      "spending_status": "allocated",
+      "start_date": "2025-01-10",
+      "target_completion_date": "2026-11-30",
+      "executing_agency": "Municipal Corporation of Greater Mumbai (MCGM)",
+      "is_demo": true
+    }
+  ],
+  "BRA": [
+    {
+      "project_id": "INV_BRA_SAO_P01",
+      "ward_id": "DIST_SAO_HELIOPOLIS",
+      "project_name": "Programa de Canalização e Contenção de Cheias",
+      "allocated_budget": 3400000.0,
+      "currency": "BRL",
+      "spending_status": "in_progress",
+      "start_date": "2024-06-01",
+      "target_completion_date": "2026-08-30",
+      "executing_agency": "Prefeitura de São Paulo",
+      "is_demo": true
+    }
+  ],
+  "ZAF": [
+    {
+      "project_id": "INV_ZAF_JHB_P01",
+      "ward_id": "WARD_JHB_SOWETO_10",
+      "project_name": "Soweto High-Mast Lighting & Grid Modernisation",
+      "allocated_budget": 8500000.0,
+      "currency": "ZAR",
+      "spending_status": "planning",
+      "start_date": "2025-04-15",
+      "target_completion_date": "2027-03-31",
+      "executing_agency": "City Power Johannesburg",
+      "is_demo": true
+    }
+  ]
+}
