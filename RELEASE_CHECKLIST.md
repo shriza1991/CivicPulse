@@ -1,4 +1,4 @@
-# Release Checklist — Nivaran v1.0.0
+# Release Checklist — CivicPulse v1.0.0
 
 ## Pre-Release Verification
 

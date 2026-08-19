@@ -18,7 +18,7 @@ const permissionConfig: Record<PermissionType, { title: string; icon: React.Reac
   camera: {
     title: 'Camera Access Needed',
     icon: <Camera className="w-8 h-8 text-primary-700" aria-hidden="true" />,
-    defaultPurpose: 'nivaran needs camera access to capture evidence photos with privacy metadata.',
+    defaultPurpose: 'civicpulse needs camera access to capture evidence photos with privacy metadata.',
   },
   location: {
     title: 'Location Services Needed',

@@ -30,7 +30,7 @@ export const CaseTimelineLayout: React.FC<CaseTimelineLayoutProps> = ({
     <Container width="reading" className={cn('py-4 font-sans space-y-4', className)}>
       <Breadcrumb
         items={[
-          { label: 'nivaran' },
+          { label: 'civicpulse' },
           { label: 'Public Reports' },
           { label: `Case #${caseId}` },
         ]}

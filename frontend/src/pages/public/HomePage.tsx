@@ -5,7 +5,7 @@ import { LandingHero } from '../../features/reporting/components/LandingHero';
 import { DiscoverFeed } from '../../features/reporting/components/DiscoverFeed';
 
 export const HomePage: React.FC = () => {
-  usePageTitle('Nivaran — AI-Powered Civic Governance Platform');
+  usePageTitle('CivicPulse — AI-Powered Civic Governance Platform');
   const navigate = useNavigate();
 
 

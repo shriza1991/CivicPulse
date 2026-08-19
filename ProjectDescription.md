@@ -1,4 +1,4 @@
-# nivaran: AI-Powered Civic Escalation & Deduplication Engine
+# civicpulse: AI-Powered Civic Escalation & Deduplication Engine
 
 ## 1. Problem Statement
 Municipal grievance systems suffer from two major bottlenecks: **evidence integrity** and **processing friction**.
@@ -10,7 +10,7 @@ Without a system that actively verifies, clusters, and escalates citizen evidenc
 ---
 
 ## 2. Solution Overview
-nivaran is an active civic accountability platform that converts raw photo uploads of infrastructure failures into structured, sendable legal dispatches within minutes, backed by a verified community evidence ledger.
+civicpulse is an active civic accountability platform that converts raw photo uploads of infrastructure failures into structured, sendable legal dispatches within minutes, backed by a verified community evidence ledger.
 
 **Implementation boundary:** The deployed end-to-end path currently covers evidence validation, Gemini classification, spatial/semantic clustering, threshold-triggered impact and action drafts, human draft approval, and email/PDF escalation. Full repair verification, the extended government lifecycle, offline sync, notifications, and community workflows have supporting backend or prototype components but are not complete end-to-end user journeys.
 1. **Deterministic Stage-0 Validation Gate**: A local image-processing pipeline (brightness, contrast, and PIL blur metrics) coupled with an image difference hashing (dhash) cache. If not cached, it runs a conservative Gemini 2.0 Vision check to filter out selfies, documents, and screenshots instantly—preventing database pollution and saving LLM costs.
@@ -25,7 +25,7 @@ nivaran is an active civic accountability platform that converts raw photo uploa
 ---
 
 ## 3. Innovation Highlights
-- **Evidence Over Invention**: Unlike other systems that fabricate municipal ward scores or officer performance rankings (which collapse under judge questioning), nivaran computes everything deterministically from real evidence (e.g., active cluster density and verified wait days).
+- **Evidence Over Invention**: Unlike other systems that fabricate municipal ward scores or officer performance rankings (which collapse under judge questioning), civicpulse computes everything deterministically from real evidence (e.g., active cluster density and verified wait days).
 - **Draft, Not Authority**: Generated documents are clearly marked as AI drafts with mandatory disclaimers, preserving legal accountability.
 - **Single-Call Merged Analysis**: Merges Agent 3 and Agent 4 generation into a single structural Gemini API call to reduce latency and execution cost in production.
 - **Multi-Channel Architecture**: WhatsApp is a lightweight reporting channel sharing the same backend pipeline as the web app. A shared `issue_service` ensures there is exactly one implementation of Stage-0 Validation and the AI pipeline — no duplicated logic, no internal network calls.

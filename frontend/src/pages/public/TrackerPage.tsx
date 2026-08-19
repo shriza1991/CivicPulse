@@ -9,7 +9,7 @@ import { EmptyState } from '../../design-system/primitives/feedback/EmptyState';
 import { useNavigate } from 'react-router-dom';
 
 export const TrackerPage: React.FC = () => {
-  usePageTitle('My Civic Reports — nivaran');
+  usePageTitle('My Civic Reports — civicpulse');
   const { data, isLoading, isError, refetch } = useIssues();
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ export const TrackerPage: React.FC = () => {
     return (
       <ErrorState
         title="Failed to load tracked reports"
-        description="Could not connect to nivaran backend services."
+        description="Could not connect to civicpulse backend services."
         onRetry={() => refetch()}
       />
     );

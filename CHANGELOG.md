@@ -1,4 +1,4 @@
-# Changelog — Nivaran
+# Changelog — CivicPulse
 
 ## [1.0.0-release] - 2026-07-29
 

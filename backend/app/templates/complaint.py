@@ -8,7 +8,7 @@ def build_complaint_document(
     formal_body: str,
     attachments: list[str],
     ledger_url: str,
-    signature: str = "Sincerely,\nConcerned Citizens of nivaran"
+    signature: str = "Sincerely,\nConcerned Citizens of civicpulse"
 ) -> str:
     attachments_str = "\n".join(f"| {i+1}. {a:<32} | Logged & Verified (Agent 1 Vision)   |" for i, a in enumerate(attachments))
     current_date = datetime.datetime.now().strftime("%d-%b-%Y")
@@ -49,7 +49,7 @@ Respected Sir/Madam,
    | EVIDENCE / DOCUMENT DESCRIPTION    | VERIFICATION STATUS                  |
    +------------------------------------+--------------------------------------+
 {attachments_str}
-   | Public Ledger Entry                | Registered on nivaran             |
+   | Public Ledger Entry                | Registered on civicpulse             |
    +------------------------------------+--------------------------------------+
 
 4. Public Tracking URL:
@@ -62,6 +62,6 @@ Respectfully submitted,
 Copy forwarded for information and necessary action to:
 1. The Office of the Municipal Commissioner, Grievance Cell, Mumbai.
 2. The Chief Vigilance Officer (CVO), Infrastructure Monitoring Division.
-3. nivaran Public Accountability Archive."""
+3. civicpulse Public Accountability Archive."""
 
     return body + policy_complaint_note

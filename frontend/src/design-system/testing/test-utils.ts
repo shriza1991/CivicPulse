@@ -1,5 +1,5 @@
 /**
- * nivaran Design System — Testing Utilities & Mock Data Fixtures
+ * civicpulse Design System — Testing Utilities & Mock Data Fixtures
  */
 
 export interface AccessibilityCheckResult {

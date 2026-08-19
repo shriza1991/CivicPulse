@@ -1,6 +1,6 @@
-# Nivaran System Architecture
+# CivicPulse System Architecture
 
-Nivaran is an AI-powered Civic Operations & Public Accountability platform designed for hackathon demonstration and production scale.
+CivicPulse is an AI-powered Civic Operations & Public Accountability platform designed for hackathon demonstration and production scale.
 
 ## High-Level Architecture
 

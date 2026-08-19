@@ -1,5 +1,5 @@
 /**
- * nivaran Production Design System
+ * civicpulse Production Design System
  * Canonical Public Package Exports
  */
 

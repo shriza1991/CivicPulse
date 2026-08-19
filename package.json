@@ -1,8 +1,8 @@
 {
-  "name": "nivaran-root",
+  "name": "civicpulse-root",
   "private": true,
   "version": "1.0.0",
-  "description": "Nivaran AI-Powered Civic Governance Platform Release Verification Scripts",
+  "description": "CivicPulse AI-Powered Civic Governance Platform Release Verification Scripts",
   "scripts": {
     "verify": "npm run verify:frontend && npm run verify:backend",
     "verify:frontend": "cmd /c \"cd /d frontend && npm run lint && npm run typecheck && npm test && npm run build\"",

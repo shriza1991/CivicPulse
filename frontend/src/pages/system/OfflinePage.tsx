@@ -5,7 +5,7 @@ import { RefreshCw } from 'lucide-react';
 import { usePageTitle } from '../../core/hooks/usePageTitle';
 
 export const OfflinePage: React.FC = () => {
-  usePageTitle('Offline — nivaran');
+  usePageTitle('Offline — civicpulse');
 
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6 font-sans text-center">

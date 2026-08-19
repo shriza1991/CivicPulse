@@ -18,7 +18,7 @@ from app.core.security_middleware import SecurityHeadersMiddleware, RateLimitMid
 
 # Configure structured logging
 setup_structured_logging()
-logger = logging.getLogger("nivaran")
+logger = logging.getLogger("civicpulse")
 
 
 from pathlib import Path
@@ -48,8 +48,8 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down application...")
 
 app = FastAPI(
-    title="Nivaran Backend API",
-    description="Backend API for Nivaran AI-Powered Civic Governance Platform",
+    title="CivicPulse Backend API",
+    description="Backend API for CivicPulse AI-Powered Civic Governance Platform",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -168,7 +168,7 @@ from fastapi.responses import FileResponse
 async def serve_spa(catchall: str):
     # If in decoupled mode or dist folder is missing, return a clean message
     if not os.path.exists(dist_dir):
-        return {"message": "Nivaran API Backend is running. Frontend is hosted externally."}
+        return {"message": "CivicPulse API Backend is running. Frontend is hosted externally."}
 
 
     # Try serving exact file (e.g. favicon.ico, logo.png) from dist root

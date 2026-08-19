@@ -20,7 +20,7 @@ export const Logo: React.FC<LogoProps> = ({
   variant = 'full',
   size = 'md',
   href = '/',
-  label = 'Nivaran home',
+  label = 'CivicPulse home',
   className,
   ...props
 }) => {
@@ -49,7 +49,7 @@ export const Logo: React.FC<LogoProps> = ({
       className={cn('inline-flex items-center gap-2 select-none', sizeHeights[size], className)}
       {...props}
     >
-      {/* Nivaran Emblem SVG */}
+      {/* CivicPulse Emblem SVG */}
       <svg
         viewBox="0 0 36 36"
         fill="none"

@@ -38,7 +38,7 @@ export const CommunityMatchStep: React.FC<CommunityMatchStepProps> = ({
           {
             value: 'join',
             label: 'Check for a Nearby Community Case (Recommended)',
-            description: 'Nivaran will check for a matching case after submission and merge the evidence only when the reports are sufficiently similar.',
+            description: 'CivicPulse will check for a matching case after submission and merge the evidence only when the reports are sufficiently similar.',
           },
           {
             value: 'new',

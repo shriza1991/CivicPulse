@@ -39,7 +39,7 @@ SUBJECT: APPLICATION UNDER SECTION 6(1) OF THE RIGHT TO INFORMATION ACT, 2005
 
 Respected Sir/Madam,
 
-1. Full Name of Applicant   : nivaran Representative (Concerned Resident)
+1. Full Name of Applicant   : civicpulse Representative (Concerned Resident)
 2. Citizenship Status       : Citizen of India (Mandatory Declaration)
 3. Information Requested    :
    Pursuant to Section 6(1) of the RTI Act 2005, please provide the following details 
@@ -61,7 +61,7 @@ Respectfully submitted,
 {signature}
 
 Address for Communication:
-nivaran Public Accountability Ledger Archive
+civicpulse Public Accountability Ledger Archive
 Web: https://nivaran.org"""
 
     return body + policy_rti_note

@@ -40,7 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         </div>
         {!isCollapsed && (
           <span className="font-semibold text-lg font-sans text-secondary-foreground whitespace-nowrap tracking-tight animate-fade">
-            nivaran
+            civicpulse
           </span>
         )}
       </div>
