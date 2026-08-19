@@ -1,6 +1,6 @@
-# Nivaran Documentation Index
+# CivicPulse Documentation Index
 
-Welcome to the Nivaran Documentation Index.
+Welcome to the CivicPulse Documentation Index.
 
 ## Core Documentation
 

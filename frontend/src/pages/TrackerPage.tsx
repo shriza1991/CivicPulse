@@ -310,7 +310,7 @@ export const TrackerPage: React.FC = () => {
             AI-Grounded Action Platform
           </span>
           <h2 className="text-xl md:text-2xl font-bold font-sans tracking-tight leading-tight">
-            nivaran Operations Center
+            civicpulse Operations Center
           </h2>
           <p className="text-xs md:text-sm text-slate-355 font-normal leading-relaxed">
             Every citizen report containing photographic evidence is processed through an automated verification pipeline. The system clusters duplicates, assesses neighborhood safety risk, and drafts reviewable, sendable legal briefs for official action.

@@ -1,7 +1,7 @@
-# Nivaran Production Verification Report
+# CivicPulse Production Verification Report
 
 ## Executive Summary
-This report summarizes the end-to-end production readiness audit of **Nivaran** conducted prior to hackathon submission. Every production integration—including Cloudinary image storage, Gemini Vision AI key pooling, non-blocking intake workflows, database persistence, and deployment configuration—was inspected and verified against real execution paths.
+This report summarizes the end-to-end production readiness audit of **CivicPulse** conducted prior to hackathon submission. Every production integration—including Cloudinary image storage, Gemini Vision AI key pooling, non-blocking intake workflows, database persistence, and deployment configuration—was inspected and verified against real execution paths.
 
 - **Backend CI Status**: ✅ **69 / 69 tests passing** (`python -m pytest`)
 - **Frontend Build Status**: ✅ **Clean production build** (`npm run build` / `tsc -b && vite build`)

@@ -465,7 +465,7 @@ export const IntakePage: React.FC = () => {
               Your Report Mattered!
             </h2>
             <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-              nivaran has verified your evidence and initiated the automated community resolution workflow.
+              civicpulse has verified your evidence and initiated the automated community resolution workflow.
             </p>
           </div>
 
@@ -654,7 +654,7 @@ export const IntakePage: React.FC = () => {
                 )}
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Provide verifiable visual evidence of municipal infrastructure problems. nivaran translates citizen reports into compiled audit trails and sendable legal briefs, bypassing administrative delays.
+                Provide verifiable visual evidence of municipal infrastructure problems. civicpulse translates citizen reports into compiled audit trails and sendable legal briefs, bypassing administrative delays.
               </p>
             </div>
           </div>

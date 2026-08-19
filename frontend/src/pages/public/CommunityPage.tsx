@@ -5,7 +5,7 @@ import { VolunteerDirectory } from '../../features/community/components/Voluntee
 import { CommunityTrustCard } from '../../features/community/components/CommunityTrustCard';
 
 export const CommunityPage: React.FC = () => {
-  usePageTitle('Community Collaboration & Verification Hub - nivaran');
+  usePageTitle('Community Collaboration & Verification Hub - civicpulse');
 
   return (
     <div className="space-y-6 font-sans py-2">

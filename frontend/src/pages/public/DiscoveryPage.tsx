@@ -11,7 +11,7 @@ import { LoadingIndicator } from '../../design-system/primitives/feedback/Loadin
 import { ErrorState } from '../../design-system/primitives/feedback/ErrorState';
 
 export const DiscoveryPage: React.FC = () => {
-  usePageTitle('Discover Public Cases & Hazards — nivaran');
+  usePageTitle('Discover Public Cases & Hazards — civicpulse');
   const navigate = useNavigate();
   const { filters, updateFilter, resetFilters } = useDiscoveryFilterState();
   const { data, isLoading, isError, refetch } = useIssues();
@@ -28,7 +28,7 @@ export const DiscoveryPage: React.FC = () => {
     return (
       <ErrorState
         title="Failed to load discovery feed"
-        description="Could not connect to nivaran backend services."
+        description="Could not connect to civicpulse backend services."
         onRetry={() => refetch()}
       />
     );

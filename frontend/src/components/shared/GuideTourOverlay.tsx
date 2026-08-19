@@ -86,7 +86,7 @@ export const TourWelcomeBanner: React.FC = () => {
       {viewStepsOpen && (
         <div className="mt-2.5 pt-2.5 border-t border-slate-200/60 flex flex-col gap-2.5">
           <div className="text-[10px] font-bold text-slate-450 uppercase tracking-widest pl-1">
-            nivaran Evaluation Guide
+            civicpulse Evaluation Guide
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 animate-fade">
             {tourPhases.map(phase => (

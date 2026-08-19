@@ -1,4 +1,4 @@
-# Nivaran Evaluation Matrix
+# CivicPulse Evaluation Matrix
 
 This is a portfolio-level evaluation record for the currently implemented workflow. It documents observable contracts and existing verification coverage; it does not claim that the broader municipal platform is complete.
 

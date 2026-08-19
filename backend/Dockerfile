@@ -1,4 +1,4 @@
-# Multi-Stage Production Dockerfile for nivaran FastAPI Backend
+# Multi-Stage Production Dockerfile for civicpulse FastAPI Backend
 FROM python:3.11-slim AS builder
 
 WORKDIR /app
@@ -24,11 +24,11 @@ COPY --from=builder /install /usr/local
 COPY . .
 
 # Create non-root runtime user
-RUN useradd -m -u 1000 nivaran && \
+RUN useradd -m -u 1000 civicpulse && \
     mkdir -p static/uploads static/downloads && \
-    chown -R nivaran:nivaran /app
+    chown -R civicpulse:civicpulse /app
 
-USER nivaran
+USER civicpulse
 
 EXPOSE 8000
 

@@ -31,7 +31,7 @@ from app.core.redis_cache import cache_manager
 from app.db import get_session
 from app.services.issue_service import IssueValidationError, create_issue_from_bytes
 
-logger = logging.getLogger("nivaran")
+logger = logging.getLogger("civicpulse")
 
 router = APIRouter(prefix="/whatsapp", tags=["whatsapp"])
 
@@ -190,7 +190,7 @@ def _humanize_issue_type(issue_type: str) -> str:
 
 def _msg_welcome() -> str:
     return (
-        "Namaste! Welcome to Nivaran.\n\n"
+        "Namaste! Welcome to CivicPulse.\n\n"
         "I can help you report a civic issue.\n\n"
         "Please send a clear photo of the problem."
     )

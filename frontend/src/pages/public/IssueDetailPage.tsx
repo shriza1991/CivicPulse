@@ -13,7 +13,7 @@ import { ArrowLeft, FileText, ShieldCheck } from 'lucide-react';
 export const IssueDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  usePageTitle(`Case #${id || ''} Detail & Timeline — Nivaran`);
+  usePageTitle(`Case #${id || ''} Detail & Timeline — CivicPulse`);
   const { data, isLoading, isError, refetch } = useIssueDetail(id || '');
   const { data: publicConfig } = usePublicConfig();
 
@@ -70,7 +70,7 @@ export const IssueDetailPage: React.FC = () => {
         <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3" role="status">
           <p className="text-sm font-semibold text-sky-900">Evidence pipeline still processing</p>
           <p className="mt-1 text-sm text-sky-800">
-            Nivaran is completing corroboration and will show the impact and action package when the available
+            CivicPulse is completing corroboration and will show the impact and action package when the available
             evidence supports it. This page refreshes automatically while processing continues.
           </p>
         </div>

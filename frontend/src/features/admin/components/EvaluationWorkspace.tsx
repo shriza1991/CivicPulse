@@ -106,7 +106,7 @@ export const EvaluationWorkspace: React.FC = () => {
             </div>
             <div>
               <h2 className="text-xl font-bold text-neutral-900">Hackathon Judge Evaluation Mode — Full E2E Journey</h2>
-              <p className="text-xs text-neutral-700">Automated end-to-end simulation across all 7 stages of Nivaran governance architecture</p>
+              <p className="text-xs text-neutral-700">Automated end-to-end simulation across all 7 stages of CivicPulse governance architecture</p>
             </div>
           </div>
 

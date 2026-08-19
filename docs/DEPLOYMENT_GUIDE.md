@@ -1,7 +1,7 @@
-# Nivaran Deployment & Operations Guide
+# CivicPulse Deployment & Operations Guide
 
 ## Overview
-Nivaran is deployed as a single multi-stage Docker container on Render, connected to external Neon PostgreSQL, Upstash Redis, Cloudinary Media Storage, and Gemini Vision API.
+CivicPulse is deployed as a single multi-stage Docker container on Render, connected to external Neon PostgreSQL, Upstash Redis, Cloudinary Media Storage, and Gemini Vision API.
 
 ---
 
@@ -29,7 +29,7 @@ CLOUDINARY_API_SECRET=<your-api-secret>
 
 ## Render Deployment (`render.yaml`)
 
-Nivaran uses `render.yaml` for zero-configuration Docker web service deployment.
+CivicPulse uses `render.yaml` for zero-configuration Docker web service deployment.
 
 ```yaml
 services:

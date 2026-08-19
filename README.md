@@ -1,4 +1,4 @@
-# Nivaran
+# CivicPulse
 
 > **AI-Powered Civic Issue Reporting & Governance Platform**
 
@@ -22,7 +22,7 @@ Turning verified citizen evidence into explainable AI decisions, government-read
 - 🏛 Government Escalation
 - ☁️ Google Cloud Run Deployment
 
-Nivaran is an AI-powered civic issue reporting and governance platform that enables citizens to report infrastructure problems while improving government accountability through intelligent workflows.
+CivicPulse is an AI-powered civic issue reporting and governance platform that enables citizens to report infrastructure problems while improving government accountability through intelligent workflows.
 
 ## Current implementation scope
 
@@ -31,7 +31,7 @@ The currently deployed product is the evidence-to-action intake workflow: image 
 The canonical production deployment is the Render service backed by Neon PostgreSQL and Upstash Redis. Other Docker, Vercel, and Cloud Run files are development or alternate deployment artifacts.
 
 
-Instead of generating another ticket number, nivaran helps citizens build evidence that is difficult to ignore.
+Instead of generating another ticket number, civicpulse helps citizens build evidence that is difficult to ignore.
 
 ## At a Glance
 
@@ -68,21 +68,21 @@ As a result, important civic issues disappear into administrative queues instead
 
 # The Solution
 
-nivaran transforms a single infrastructure photo into a verified, explainable, government-ready civic case.
+civicpulse transforms a single infrastructure photo into a verified, explainable, government-ready civic case.
 
 ![Product Workflow](docs/assets/product-workflow.png)
 
-# Why nivaran?
+# Why civicpulse?
 
 Most civic platforms focus on **report collection**.
 
-nivaran focuses on **government accountability**.
+civicpulse focuses on **government accountability**.
 
 Instead of asking:
 
 > "How can citizens report problems?"
 
-nivaran asks:
+civicpulse asks:
 
 > **"How can verified community evidence drive real government action?"**
 
@@ -90,9 +90,9 @@ The platform combines evidence validation, AI reasoning, community intelligence,
 
 ---
 
-## Traditional Reporting vs nivaran
+## Traditional Reporting vs civicpulse
 
-| Traditional Platforms | nivaran |
+| Traditional Platforms | civicpulse |
 |----------------------|------------|
 | Complaint Collection | Evidence Validation |
 | Individual Reports | Community Intelligence |
@@ -173,7 +173,7 @@ The platform combines evidence validation, AI reasoning, community intelligence,
 
 ## System Guarantees
 
-Unlike traditional AI demos, nivaran guarantees:
+Unlike traditional AI demos, civicpulse guarantees:
 
 - No automatic government submissions
 - Human approval before every escalation
@@ -182,7 +182,7 @@ Unlike traditional AI demos, nivaran guarantees:
 - Immutable audit trail
 - Transparent community intelligence
 
-Every visible insight inside nivaran can be traced back to verified citizen evidence.
+Every visible insight inside civicpulse can be traced back to verified citizen evidence.
 
 
 # Local Setup
@@ -222,7 +222,7 @@ npm run dev
 
 # Access Anywhere
 
-nivaran supports multiple reporting channels that all share the same backend pipeline.
+civicpulse supports multiple reporting channels that all share the same backend pipeline.
 
 | Channel | Status | Purpose |
 |---------|--------|--------|

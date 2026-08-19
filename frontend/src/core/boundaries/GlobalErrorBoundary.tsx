@@ -22,7 +22,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[nivaran ErrorBoundary] Caught unhandled runtime exception:', error, errorInfo);
+    console.error('[civicpulse ErrorBoundary] Caught unhandled runtime exception:', error, errorInfo);
   }
 
   public handleReset = () => {

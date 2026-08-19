@@ -91,7 +91,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-teal-600" />
             <h3 className="font-bold text-base text-slate-800">
-              Nivaran Identity & Access Management
+              CivicPulse Identity & Access Management
             </h3>
           </div>
           <button
@@ -120,7 +120,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         {/* Content */}
         <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
           <p className="text-xs text-slate-600 leading-relaxed">
-            Select a verified role account below to experience Nivaran's role-based access control (RBAC), executive case queue, and audit trails.
+            Select a verified role account below to experience CivicPulse's role-based access control (RBAC), executive case queue, and audit trails.
           </p>
 
           {errorMsg && (
