@@ -47,7 +47,7 @@ async def generate_policy_recommendation(
         raise ValueError(f"Cluster with id {cluster_id} not found")
 
     issues = session.exec(select(Issue).where(Issue.cluster_id == cluster_id)).all()
-    signal_count = len(issues) if issues else cluster.report_count
+    signal_count = len(issues) if issues else (cluster.report_count if cluster.report_count > 0 else 1)
     avg_severity = (sum(i.severity for i in issues) / max(1, len(issues))) if issues else 3.0
     avg_trust = (sum(getattr(i, "credibility_score", 0.85) for i in issues) / max(1, len(issues))) if issues else 0.85
 

@@ -6,7 +6,7 @@ Provides dynamic country configuration and data adapters for:
   - Brazil (BRA): BRL, Portuguese/English, São Paulo context
   - South Africa (ZAF): ZAR, Zulu/English, Gauteng context
 """
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pydantic import BaseModel
 
 class CountryConfig(BaseModel):
@@ -60,3 +60,12 @@ def get_country_config(country_code: str = "IND") -> CountryConfig:
     """Returns the CountryConfig adapter for the specified country code."""
     code = (country_code or "IND").upper()
     return COUNTRY_REGISTRY.get(code, COUNTRY_REGISTRY["IND"])
+
+def list_supported_countries() -> List[CountryConfig]:
+    """Returns list of all supported country configurations."""
+    return list(COUNTRY_REGISTRY.values())
+
+def format_currency(amount: float, country_code: str = "IND") -> str:
+    """Formats a numerical budget into local currency notation."""
+    config = get_country_config(country_code)
+    return f"{config.currency_symbol}{amount:,.2f} ({config.currency_code})"
