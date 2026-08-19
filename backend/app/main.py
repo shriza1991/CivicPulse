@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.db import init_db
-from app.routers import issues, clusters, impact, actions, escalations, whatsapp, auth, sync_router, case_router, notification_router, analytics_router, audit_router, voice_router
+from app.routers import issues, clusters, impact, actions, escalations, whatsapp, auth, sync_router, case_router, notification_router, analytics_router, audit_router, voice_router, policy_router
 
 
 
@@ -87,6 +87,7 @@ app.include_router(notification_router.router, prefix="/api")
 app.include_router(analytics_router.router, prefix="/api")
 app.include_router(audit_router.router, prefix="/api")
 app.include_router(voice_router.router, prefix="/api")
+app.include_router(policy_router.router, prefix="/api")
 
 @app.get("/api/live")
 @app.get("/live")
