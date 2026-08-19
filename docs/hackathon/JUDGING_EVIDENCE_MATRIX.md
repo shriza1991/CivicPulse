@@ -1,0 +1,12 @@
+# JUDGING EVIDENCE MATRIX — Nivaran (Build with AI: Code for Communities)
+
+## Track 1: AI for Digital Public Infrastructure & Governance
+
+| Judging Criterion | Weight | Key Capabilities Implemented | Direct Code Evidence |
+|---|---|---|---|
+| **Problem-Solution Fit** | 20% | Transforms citizen complaints into aggregated, evidence-grounded Demand Hotspots for government planners. | [DemandHotspotWorkspace.tsx](file:///d:/Projects/CivicPulse/frontend/src/features/government/components/DemandHotspotWorkspace.tsx)<br>[cluster.py](file:///d:/Projects/CivicPulse/backend/app/models/cluster.py) |
+| **AI/Technical Execution** | 25% | Gemini 2.5 Stage 0 photo evidence gate, structured policy dossier generation, round-robin key pool failover, and deterministic score engine. | [evidence_validation.py](file:///d:/Projects/CivicPulse/backend/app/services/evidence_validation.py)<br>[policy_advisor_service.py](file:///d:/Projects/CivicPulse/backend/app/services/policy_advisor_service.py)<br>[priority_engine.py](file:///d:/Projects/CivicPulse/backend/app/services/priority_engine.py) |
+| **Cross-Border Applicability** | 20% | Dynamic country registry adapters supporting India (IND), Brazil (BRA), and South Africa (ZAF) with local currency, language, and ward terms. | [country_adapters.py](file:///d:/Projects/CivicPulse/backend/app/services/country_adapters.py)<br>[test_cross_border_pipeline.py](file:///d:/Projects/CivicPulse/backend/tests/test_cross_border_pipeline.py) |
+| **Impact Potential** | 10% | Ward-level data fusion combining population density, vulnerability ratio, poverty rate, infrastructure condition, and active investment context. | [data_fusion_service.py](file:///d:/Projects/CivicPulse/backend/app/services/data_fusion_service.py)<br>[demographics_data.json](file:///d:/Projects/CivicPulse/backend/app/fixtures/demographics_data.json) |
+| **Deployability & Scalability** | 20% | End-to-end integration test suite, security header middlewares, 100% test pass rate, clean production Vite build. | [test_e2e_demand_intelligence.py](file:///d:/Projects/CivicPulse/backend/tests/test_e2e_demand_intelligence.py)<br>[main.py](file:///d:/Projects/CivicPulse/backend/app/main.py) |
+| **Presentation & Clarity** | 5% | Dedicated Demand Hotspots policymaker console with clear score factor breakdowns and human-in-the-loop policy review controls. | [GovernmentQueuePage.tsx](file:///d:/Projects/CivicPulse/frontend/src/pages/institutional/GovernmentQueuePage.tsx) |
