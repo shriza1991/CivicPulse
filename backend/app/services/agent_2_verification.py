@@ -170,6 +170,8 @@ async def _verify_and_cluster_issue_impl(
         area_label = issue.user_note[:100] if issue.user_note else f"Area near {issue.latitude:.4f}, {issue.longitude:.4f}"
         new_cluster = Cluster(
             area_label=area_label,
+            category=issue.issue_type,
+            country_code=getattr(issue, "country_code", "IND"),
             center_lat=issue.latitude,
             center_lng=issue.longitude,
             report_count=1,
