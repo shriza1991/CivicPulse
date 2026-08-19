@@ -13,5 +13,5 @@ Status Authority: Lead Architect Audit
 | **Phase 7** | Gemini Policy Advisor | `policy_advisor_service.py`, `policy_router.py` API endpoints, and unit tests pass in `test_policy_advisor.py`. | **COMPLETE** | None | N/A |
 | **Phase 8** | Policymaker Workspace | `DemandHotspotWorkspace.tsx` mounted in `GovernmentQueuePage.tsx`, frontend smoke tests & production build pass. | **COMPLETE** | None | N/A |
 | **Phase 9** | Cross-Border Demonstration | `country_adapters.py` formatting helpers, unit tests pass in `test_cross_border_pipeline.py` for IND, BRA, ZAF. | **COMPLETE** | None | N/A |
-| **Phase 10** | True End-to-End Quality & Security | Separate backend unit tests pass, but no end-to-end integration script exists. | **INCOMPLETE** | End-to-end integration test (`test_e2e_demand_intelligence.py`), production build validation, security audit. | **Task 10.1: Build E2E System Integration Test** |
-| **Phase 11** | Submission Preparation | Docs and contracts exist. | **INCOMPLETE** | Canonical demo dataset, demo script, judging matrix. | Phase 11 preparation. |
+| **Phase 10** | True End-to-End Quality & Security | Full system test `test_e2e_demand_intelligence.py` passes, security headers verified, frontend build succeeds. | **COMPLETE** | None | N/A |
+| **Phase 11** | Submission Preparation | Docs and contracts exist. | **INCOMPLETE** | Canonical demo dataset, demo script, judging matrix. | **Task 11.1: Prepare Hackathon Submission Assets** |
