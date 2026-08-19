@@ -7,6 +7,24 @@ from unittest.mock import MagicMock, AsyncMock, patch
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.services.speech_service import resolve_content_type, SpeechService
+
+
+def test_resolve_content_type_normalization():
+    """Test resolve_content_type helper for various audio extensions and MIME overrides."""
+    # Test 1: video/mpeg for .mp3 -> normalized to audio/mpeg
+    assert resolve_content_type("sample.mp3", "video/mpeg") == "audio/mpeg"
+
+    # Test 2: .wav without original content type -> resolved to audio/wav
+    assert resolve_content_type("sample.wav", None) == "audio/wav"
+
+    # Test 3: .webm with video/webm -> resolved to audio/webm
+    assert resolve_content_type("sample.webm", "video/webm") == "audio/webm"
+
+    # Additional extensions
+    assert resolve_content_type("recording.m4a", "application/octet-stream") == "audio/mp4"
+    assert resolve_content_type("voice.aac", None) == "audio/aac"
+    assert resolve_content_type("audio.ogg", "video/ogg") == "audio/ogg"
 
 
 def test_voice_health_endpoint(client: TestClient):
@@ -29,10 +47,8 @@ def test_voice_transcribe_missing_file(client: TestClient):
 
 
 @pytest.mark.asyncio
-async def test_speech_service_transcribe_success():
-    """Test SpeechService transcribe_audio method with mocked httpx client."""
-    from app.services.speech_service import SpeechService
-
+async def test_speech_service_transcribe_success_and_mime_handling():
+    """Test SpeechService transcribe_audio method verifies normalized outgoing MIME type."""
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.json.return_value = {
@@ -43,13 +59,24 @@ async def test_speech_service_transcribe_success():
 
     with patch("httpx.AsyncClient.post", new_callable=AsyncMock) as mock_post:
         mock_post.return_value = mock_response
+
+        # File with incorrect video/mpeg content type
         audio_file = io.BytesIO(b"fake audio data")
-        audio_file.filename = "test.mp3"
-        audio_file.content_type = "audio/mpeg"
+        audio_file.filename = "sample.mp3"
+        audio_file.content_type = "video/mpeg"
 
         result = await SpeechService.transcribe_audio(audio_file)
         assert "transcript" in result
         assert result["transcript"] == "सड़क में बड़ा गड्ढा है"
+
+        # Verify outgoing files parameter passed to Sarvam AI contains normalized 'audio/mpeg' MIME
+        mock_post.assert_called_once()
+        _, kwargs = mock_post.call_args
+        files_arg = kwargs.get("files")
+        assert files_arg is not None
+        file_tuple = files_arg.get("file")
+        assert file_tuple[0] == "sample.mp3"
+        assert file_tuple[2] == "audio/mpeg"
 
 
 def test_voice_transcribe_endpoint_success(client: TestClient):

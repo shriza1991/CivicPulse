@@ -5,12 +5,31 @@ Provides audio transcription capabilities using Sarvam AI saaras:v3 model.
 import os
 import logging
 import httpx
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from app.config import settings
 
 logger = logging.getLogger("nivaran")
 
 SARVAM_STT_URL = "https://api.sarvam.ai/speech-to-text"
+
+
+def resolve_content_type(filename: str, original_content_type: Optional[str]) -> str:
+    """Normalize MIME type based on audio file extension."""
+    if not filename:
+        return original_content_type or "application/octet-stream"
+
+    ext = filename.lower().split(".")[-1]
+
+    mapping = {
+        "mp3": "audio/mpeg",
+        "wav": "audio/wav",
+        "webm": "audio/webm",
+        "m4a": "audio/mp4",
+        "aac": "audio/aac",
+        "ogg": "audio/ogg",
+    }
+
+    return mapping.get(ext, original_content_type or "application/octet-stream")
 
 
 class SpeechService:
@@ -33,7 +52,7 @@ class SpeechService:
 
         file_bytes = b""
         filename = "audio.mp3"
-        content_type = "audio/mpeg"
+        raw_content_type = "audio/mpeg"
 
         if hasattr(file, "read"):
             read_res = file.read()
@@ -42,26 +61,41 @@ class SpeechService:
             else:
                 file_bytes = read_res
             filename = getattr(file, "filename", None) or "audio.mp3"
-            content_type = getattr(file, "content_type", None) or "audio/mpeg"
+            raw_content_type = getattr(file, "content_type", None)
         elif isinstance(file, bytes):
             file_bytes = file
+            raw_content_type = "audio/mpeg"
         else:
             raise ValueError("Unsupported file format provided for transcription.")
 
         if not file_bytes:
             raise ValueError("Audio file is empty.")
 
+        logger.info(
+            f"Voice upload received: filename={filename}, content_type={raw_content_type}"
+        )
+
+        content_type = resolve_content_type(filename, raw_content_type)
+
         headers = {
             "api-subscription-key": api_key
         }
 
         files = {
-            "file": (filename, file_bytes, content_type)
+            "file": (
+                filename,
+                file_bytes,
+                content_type,
+            )
         }
         data = {
             "model": "saaras:v3",
             "mode": "transcribe"
         }
+
+        logger.info(
+            f"Sending file to Sarvam: filename={filename}, content_type={content_type}"
+        )
 
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
