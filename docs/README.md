@@ -1,9 +1,9 @@
-# CivicPulse Documentation Index
+# Documentation Directory — Nivaran
 
-Welcome to the CivicPulse Documentation Index.
+This directory contains the documentation structure for **Nivaran — Community Demand Intelligence**.
 
-## Core Documentation
+## Directory Structure
 
-1. [SYSTEM_ARCHITECTURE.md](file:///d:/Projects/CivicPulse/docs/SYSTEM_ARCHITECTURE.md) — Subsystem architecture, Gemini AI key pooling, Cloudinary storage, and API reference.
-2. [DEPLOYMENT_GUIDE.md](file:///d:/Projects/CivicPulse/docs/DEPLOYMENT_GUIDE.md) — Render deployment guide, environment variable specifications, and release checklist.
-3. [PRODUCTION_VERIFICATION_REPORT.md](file:///d:/Projects/CivicPulse/docs/PRODUCTION_VERIFICATION_REPORT.md) — Production audit and verification summary.
+- [`hackathon/`](file:///d:/Projects/CivicPulse/docs/hackathon): **Active Canonical Specifications** (00_MASTER_CONTEXT through 12_TECHNOLOGY_DECISIONS, audit reports, and indexes).
+- [`research/`](file:///d:/Projects/CivicPulse/docs/research): Deep research background report (`DEEP_RESEARCH.md`).
+- [`archive/`](file:///d:/Projects/CivicPulse/docs/archive): Historical documentation, legacy architecture guides, and old prompts.

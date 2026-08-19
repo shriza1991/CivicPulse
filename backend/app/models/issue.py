@@ -12,8 +12,11 @@ class Issue(SQLModel, table=True):
 
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     photo_url: str
+    audio_url: Optional[str] = Field(default=None, nullable=True)
     latitude: float
     longitude: float
+    country_code: str = Field(default="IND", index=True)
+    ward_id: Optional[str] = Field(default=None, nullable=True, index=True)
     user_note: Optional[str] = Field(default=None, nullable=True)
     issue_type: str
     severity: int

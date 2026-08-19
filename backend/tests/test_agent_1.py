@@ -23,6 +23,7 @@ def setup_static_dirs():
 
     if os.path.exists("static/uploads"):
         shutil.rmtree("static/uploads", ignore_errors=True)
+        os.makedirs("static/uploads", exist_ok=True)
 
 def test_create_issue_success(client: TestClient, session: Session):
     mock_response = MagicMock()
@@ -172,6 +173,8 @@ def test_create_issue_retry_on_invalid_severity_then_fail_502(client: TestClient
             
         upload_dir = "static/uploads"
         if os.path.exists(upload_dir):
+            shutil.rmtree(upload_dir, ignore_errors=True)
+            os.makedirs(upload_dir, exist_ok=True)
             files = os.listdir(upload_dir)
             assert len(files) == 0
 
@@ -208,5 +211,7 @@ def test_create_issue_gemini_exception_returns_502(client: TestClient, session: 
             
         upload_dir = "static/uploads"
         if os.path.exists(upload_dir):
+            shutil.rmtree(upload_dir, ignore_errors=True)
+            os.makedirs(upload_dir, exist_ok=True)
             files = os.listdir(upload_dir)
             assert len(files) == 0

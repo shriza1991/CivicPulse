@@ -52,7 +52,8 @@ async def test_speech_service_transcribe_success_and_mime_handling():
         "language_code": "hi-IN"
     }
 
-    with patch("httpx.AsyncClient.post", new_callable=AsyncMock) as mock_post:
+    with patch("httpx.AsyncClient.post", new_callable=AsyncMock) as mock_post, \
+         patch("app.services.speech_service.settings.SARVAM_API_KEY", "dummy_test_key"):
         mock_post.return_value = mock_response
 
         audio_file = io.BytesIO(b"fake audio data")

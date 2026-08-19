@@ -7,6 +7,8 @@ from .user import User, Role, Permission, RefreshToken, DeviceSession, LoginHist
 from .sync import IdempotencyKey, UploadSession, MediaAsset, OfflineSyncJob, SyncConflict
 from .case import Department, OfficerProfile, CaseAssignment, CaseTransition, RepairVerification, ResolutionRecord
 from .notification import Notification, NotificationPreference, NotificationDelivery, Announcement
+from .demographics import CensusDemographics
+from .policy_recommendation import PolicyRecommendation
 
 __all__ = [
     "Cluster",
@@ -35,6 +37,8 @@ __all__ = [
     "NotificationPreference",
     "NotificationDelivery",
     "Announcement",
+    "CensusDemographics",
+    "PolicyRecommendation",
 ]
 
 
