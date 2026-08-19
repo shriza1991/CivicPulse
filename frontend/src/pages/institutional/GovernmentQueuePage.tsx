@@ -13,7 +13,7 @@ import { Button } from '../../design-system/primitives/buttons/Button';
 import { LayoutGrid, Table } from 'lucide-react';
 
 export const GovernmentQueuePage: React.FC = () => {
-  usePageTitle('Executive Work Queue — Municipal Operations');
+  usePageTitle('Policymaker Intelligence Queue — Nivaran Community Demand');
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useIssues();
   const { filters, selectedIds, updateFilters, toggleSelect, selectAll, clearSelection } = useGovernmentQueueStore();
@@ -22,7 +22,7 @@ export const GovernmentQueuePage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="py-12 flex justify-center">
-        <LoadingIndicator label="Loading executive work queue..." size="lg" />
+        <LoadingIndicator label="Loading demand intelligence queue..." size="lg" />
       </div>
     );
   }
@@ -30,8 +30,8 @@ export const GovernmentQueuePage: React.FC = () => {
   if (isError) {
     return (
       <ErrorState
-        title="Failed to load executive queue"
-        description="Could not connect to CivicPulse municipal backend services."
+        title="Failed to load demand intelligence queue"
+        description="Could not connect to Nivaran backend services."
         onRetry={() => refetch()}
       />
     );
