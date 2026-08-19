@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePageTitle } from '../../core/hooks/usePageTitle';
 import { useIssues } from '../../api/queries';
 import { useGovernmentQueueStore } from '../../features/government/state/useGovernmentQueueStore';
+import { DemandHotspotWorkspace } from '../../features/government/components/DemandHotspotWorkspace';
 import { QueueFilterControls } from '../../features/government/components/QueueFilterControls';
 import { WorkQueueTable } from '../../features/government/components/WorkQueueTable';
 import { WorkQueueKanban } from '../../features/government/components/WorkQueueKanban';
@@ -10,19 +11,22 @@ import { SLAAnalyticsDashboard } from '../../features/government/components/SLAA
 import { LoadingIndicator } from '../../design-system/primitives/feedback/LoadingIndicator';
 import { ErrorState } from '../../design-system/primitives/feedback/ErrorState';
 import { Button } from '../../design-system/primitives/buttons/Button';
-import { LayoutGrid, Table } from 'lucide-react';
+import { Flame, LayoutGrid, Table, Layers } from 'lucide-react';
 
 export const GovernmentQueuePage: React.FC = () => {
-  usePageTitle('Policymaker Intelligence Queue — Nivaran Community Demand');
+  usePageTitle('Policymaker Intelligence Workspace — Nivaran Community Demand');
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useIssues();
   const { filters, selectedIds, updateFilters, toggleSelect, selectAll, clearSelection } = useGovernmentQueueStore();
+  
+  // Tab state: 'hotspots' (default for planners) vs 'queue' (officer case operations)
+  const [activeTab, setActiveTab] = useState<'hotspots' | 'queue'>('hotspots');
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban');
 
   if (isLoading) {
     return (
       <div className="py-12 flex justify-center">
-        <LoadingIndicator label="Loading demand intelligence queue..." size="lg" />
+        <LoadingIndicator label="Loading demand intelligence workspace..." size="lg" />
       </div>
     );
   }
@@ -30,7 +34,7 @@ export const GovernmentQueuePage: React.FC = () => {
   if (isError) {
     return (
       <ErrorState
-        title="Failed to load demand intelligence queue"
+        title="Failed to load demand intelligence workspace"
         description="Could not connect to Nivaran backend services."
         onRetry={() => refetch()}
       />
@@ -56,17 +60,37 @@ export const GovernmentQueuePage: React.FC = () => {
 
   return (
     <div className="space-y-6 font-sans py-2">
+      {/* SLA & Aggregate Metrics */}
       <SLAAnalyticsDashboard />
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
-          <div className="flex items-center gap-3">
-            <h2 className="text-xl font-bold text-neutral-900">Assigned Department Work Queue</h2>
-            <span className="text-xs font-mono font-semibold text-primary-700 bg-primary-500/10 px-2 py-0.5 rounded-pill">
-              {filteredIssues.length} Queue Items
-            </span>
-          </div>
+      {/* Main Workspace Navigation Tabs */}
+      <div className="flex items-center justify-between border-b border-neutral-200 pb-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab('hotspots')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
+              activeTab === 'hotspots'
+                ? 'bg-primary-700 text-white shadow-xs'
+                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+            }`}
+          >
+            <Flame className="w-4 h-4" />
+            Demand Hotspots & Policy Advisor
+          </button>
+          <button
+            onClick={() => setActiveTab('queue')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
+              activeTab === 'queue'
+                ? 'bg-primary-700 text-white shadow-xs'
+                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            Officer Case Queue ({filteredIssues.length})
+          </button>
+        </div>
 
+        {activeTab === 'queue' && (
           <div className="flex items-center gap-1.5">
             <Button
               variant={viewMode === 'kanban' ? 'primary' : 'ghost'}
@@ -85,26 +109,33 @@ export const GovernmentQueuePage: React.FC = () => {
               Queue Table
             </Button>
           </div>
-        </div>
-
-        <QueueFilterControls filters={filters} onUpdate={updateFilters} />
-
-        {viewMode === 'kanban' ? (
-          <WorkQueueKanban
-            issues={filteredIssues}
-            onReviewCase={(issueId) => navigate(`/internal/document-review/${issueId}`)}
-          />
-        ) : (
-          <WorkQueueTable
-            issues={filteredIssues}
-            selectedIds={selectedIds}
-            onToggleSelect={toggleSelect}
-            onSelectAll={selectAll}
-            onClearSelection={clearSelection}
-            onReviewCase={(issueId) => navigate(`/internal/document-review/${issueId}`)}
-          />
         )}
       </div>
+
+      {/* Primary Workspace View */}
+      {activeTab === 'hotspots' ? (
+        <DemandHotspotWorkspace />
+      ) : (
+        <div className="space-y-4">
+          <QueueFilterControls filters={filters} onUpdate={updateFilters} />
+
+          {viewMode === 'kanban' ? (
+            <WorkQueueKanban
+              issues={filteredIssues}
+              onReviewCase={(issueId) => navigate(`/internal/document-review/${issueId}`)}
+            />
+          ) : (
+            <WorkQueueTable
+              issues={filteredIssues}
+              selectedIds={selectedIds}
+              onToggleSelect={toggleSelect}
+              onSelectAll={selectAll}
+              onClearSelection={clearSelection}
+              onReviewCase={(issueId) => navigate(`/internal/document-review/${issueId}`)}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };
