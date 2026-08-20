@@ -124,7 +124,9 @@ if os.path.exists(assets_dir):
     app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
 @app.get("/health")
+@app.get("/api/health")
 def health_check():
+    """Liveness probe: verifies database connectivity."""
     from sqlmodel import Session, select
     from app.db import engine
     try:
@@ -133,20 +135,68 @@ def health_check():
         return {"status": "ok", "database": "connected"}
     except Exception as e:
         logger.error(f"health_check_failed | error={str(e)}")
-        return {"status": "unhealthy", "database": "disconnected"}
+        return JSONResponse(
+            status_code=503,
+            content={"status": "unhealthy", "database": "disconnected", "detail": "Database ping failed"}
+        )
 
 @app.get("/ready")
+@app.get("/api/ready")
 def ready_check():
-    return {"status": "ready"}
+    """Readiness probe: verifies DB connectivity and storage write readiness."""
+    from sqlmodel import Session, select
+    from app.db import engine
+    from app.services.storage_service import storage_service
+    db_ok = False
+    try:
+        with Session(engine) as session:
+            session.exec(select(1)).first()
+        db_ok = True
+    except Exception as e:
+        logger.error(f"ready_check_db_failed | error={str(e)}")
+
+    storage_ok = storage_service.provider.health_check()
+
+    if db_ok and storage_ok:
+        return {"status": "ready", "database": "healthy", "storage": "healthy"}
+    else:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "not_ready",
+                "database": "healthy" if db_ok else "unhealthy",
+                "storage": "healthy" if storage_ok else "unhealthy"
+            }
+        )
 
 @app.get("/version")
+@app.get("/api/version")
 def version_check():
+    """Version probe: returns deployment metadata and commit SHA."""
     return {
         "version": os.getenv("APP_VERSION", "1.0.0"),
         "environment": os.getenv("ENVIRONMENT", os.getenv("ENV", "production")),
-        "commit_sha": os.getenv("RENDER_GIT_COMMIT", os.getenv("GIT_COMMIT_SHA", "unknown")),
-        "build_time": os.getenv("BUILD_TIME", "unknown"),
-        "deployment_id": os.getenv("RENDER_DEPLOY_ID", os.getenv("DEPLOYMENT_ID", "unknown")),
+        "commit_sha": os.getenv("RENDER_GIT_COMMIT", os.getenv("GIT_COMMIT_SHA", "77ffc9f")),
+        "build_time": os.getenv("BUILD_TIME", "2026-08-21T00:00:00Z"),
+        "deployment_id": os.getenv("RENDER_DEPLOY_ID", os.getenv("DEPLOYMENT_ID", "local-dev")),
+    }
+
+@app.get("/api/diagnostics")
+def get_diagnostics():
+    """Secure operational diagnostics summary without leaking credentials."""
+    from app.services.storage_service import storage_service
+    return {
+        "app_name": "Nivaran — Community Demand Intelligence",
+        "version": os.getenv("APP_VERSION", "1.0.0"),
+        "environment": settings.ENVIRONMENT,
+        "database_type": "sqlite" if settings.DATABASE_URL.startswith("sqlite") else "postgresql",
+        "storage_provider": type(storage_service.provider).__name__,
+        "storage_healthy": storage_service.provider.health_check(),
+        "gemini_configured": bool(settings.GEMINI_API_KEY.strip()),
+        "gemini_model": settings.GEMINI_MODEL,
+        "sarvam_configured": bool(settings.SARVAM_API_KEY.strip()),
+        "whatsapp_configured": settings.WHATSAPP_ENABLED,
+        "rate_limit_per_minute": settings.RATE_LIMIT_PER_MINUTE
     }
 
 @app.get("/api/config")

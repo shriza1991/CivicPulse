@@ -203,15 +203,6 @@ export const IntakePage: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-  const handleLocationLocate = useCallback((coords: { lat: number; lng: number } | null) => {
-    setCoordinates((previous) => {
-      if (previous?.lat === coords?.lat && previous?.lng === coords?.lng) {
-        return previous;
-      }
-      return coords;
-    });
-=======
   const handleVoiceConfirmed = (audioFile: File, analysis: VoiceAnalysisResult) => {
     setVoiceAudio(audioFile);
     setVoiceAnalysis(analysis);
@@ -237,26 +228,17 @@ export const IntakePage: React.FC = () => {
     setAiConfidence(0.92);
   };
 
-  const handleLocationLocate = (coords: { lat: number; lng: number } | null) => {
-    setCoordinates(coords);
->>>>>>> 90dfc97 (fix(voice): remediate 15s timeout, add first-class multilingual voice demand intake, and align ontology to Nivaran)
+  const handleLocationLocate = useCallback((coords: { lat: number; lng: number } | null) => {
+    setCoordinates((previous) => {
+      if (previous?.lat === coords?.lat && previous?.lng === coords?.lng) {
+        return previous;
+      }
+      return coords;
+    });
     if (coords) {
       setFieldErrors((previous) => previous.coordinates ? { ...previous, coordinates: '' } : previous);
     }
   }, []);
-
-  const handleVoiceAnalysis = (result: VoiceAnalyzeResponse) => {
-    const analysis = result.analysis;
-    const note = [
-      `Voice transcript (${analysis.detected_language}): ${result.transcript}`,
-      analysis.english_translation ? `English interpretation: ${analysis.english_translation}` : '',
-    ].filter(Boolean).join('\n\n');
-
-    setUserNote(note);
-    setIssueCategory(analysis.issue_category);
-    setSeverity(analysis.severity.toLowerCase());
-    setDepartment(analysis.department);
-  };
 
   // Step controls
   const handleNextStep = () => {
@@ -868,8 +850,6 @@ export const IntakePage: React.FC = () => {
                     className="w-full text-sm border border-slate-250 rounded-small px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none mt-2"
                     maxLength={500}
                   />
-
-                  <VoiceDemandInput onAnalysisComplete={handleVoiceAnalysis} />
                 </div>
 
                 {/* Final Case Review Summary */}

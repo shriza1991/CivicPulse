@@ -523,6 +523,49 @@ export const DemandHotspotWorkspace: React.FC = () => {
                   </div>
                 )}
               </div>
+
+              {/* AI Transparency & Provenance Trace Panel */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 space-y-2.5 text-xs text-slate-600 font-sans">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <span className="font-bold text-[11px] uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-primary-700" />
+                    Decision Intelligence Provenance Trace
+                  </span>
+                  <span className="text-[10px] font-mono bg-slate-200/70 text-slate-700 px-1.5 py-0.5 rounded">
+                    Track 1 AI Governance
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                  <div className="flex items-start gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mt-1.5 shrink-0" />
+                    <div>
+                      <strong className="text-slate-800">Voice Transcription:</strong> Sarvam AI (<code className="text-[10px]">saaras:v3</code>)
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                    <div>
+                      <strong className="text-slate-800">Demand Understanding:</strong> Google Gemini 2.5 Flash
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
+                    <div>
+                      <strong className="text-slate-800">Priority Computation:</strong> Nivaran Deterministic Engine (0–100)
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0" />
+                    <div>
+                      <strong className="text-slate-800">Policy Reasoning:</strong> Google Gemini 2.5 Policy Advisor
+                    </div>
+                  </div>
+                </div>
+                <div className="text-[10px] text-slate-400 border-t border-slate-200/60 pt-1.5 flex items-center justify-between">
+                  <span>Deterministic census fusion: Census & Infrastructure Registry</span>
+                  <span className="font-semibold text-slate-600">Human Approval Required</span>
+                </div>
+              </div>
             </>
           ) : (
             <div className="p-8 text-center text-neutral-500 bg-white rounded-xl border border-neutral-200">
