@@ -52,55 +52,56 @@ export const AgentTimelineComponent: React.FC<AgentTimelineProps> = ({
 
     // Check if we are in upload/submitting state
     if (isSubmitting || submitError) {
-      // In synchronous execution, we are at intake validation & classification
-      const step0: StepState = submitError ? 'failed' : 'running';
-      const step1: StepState = 'pending';
-      const step2: StepState = 'pending';
-      const step3: StepState = 'pending';
+      const elapsed = elapsedSeconds ?? 0;
+      // Dynamic step progress indicator based on elapsed seconds during processing
+      const step0: StepState = submitError ? 'failed' : 'completed';
+      const step1: StepState = submitError ? 'failed' : (elapsed > 2 ? 'completed' : 'running');
+      const step2: StepState = submitError ? 'failed' : (elapsed > 5 ? (elapsed > 8 ? 'completed' : 'running') : 'pending');
+      const step3: StepState = submitError ? 'failed' : (elapsed > 8 ? 'running' : 'pending');
       const step4: StepState = 'pending';
       const step5: StepState = 'pending';
 
       return [
         {
           number: 1,
-          name: 'Stage 0 Evidence Validation',
-          agentLabel: 'Stage 0: Validation Gate',
-          description: 'Validates resolution, blur, brightness, dhash cache, and runs Gemini Vision check.',
+          name: 'Demand Intake & Media Intake',
+          agentLabel: 'Stage 1: Intake Gateway',
+          description: 'Secures citizen voice/photo evidence and parses geographic metadata.',
           status: step0,
         },
         {
           number: 2,
-          name: 'Visual Intake & Classification',
-          agentLabel: 'Agent 1: Classifier',
-          description: 'Extracts coordinates, checks clarity, and classifies issue attributes.',
+          name: 'Evidence Trust Verification',
+          agentLabel: 'Stage 2: Evidence Gate',
+          description: 'Validates resolution, media integrity, blur, and runs AI visual check.',
           status: step1,
         },
         {
           number: 3,
-          name: 'Geographic Deduplication',
-          agentLabel: 'Agent 2: Geo-Scanner',
-          description: 'Triggers Haversine spatial scanner and runs duplicate matching.',
+          name: 'Demand Understanding & Structuring',
+          agentLabel: 'Stage 3: Demand Parser',
+          description: 'Extracts infrastructure need, category, and severity from multimodal signals.',
           status: step2,
         },
         {
           number: 4,
-          name: 'Impact Assessment',
-          agentLabel: 'Agent 3: Impact Analyst',
-          description: 'Calculates public safety consequences on escalation threshold.',
+          name: 'Community Demand Hotspot Correlation',
+          agentLabel: 'Stage 4: Spatial Engine',
+          description: 'Triggers Haversine spatial correlation and aggregates into Demand Clusters.',
           status: step3,
         },
         {
           number: 5,
-          name: 'Official Draft Preparation',
-          agentLabel: 'Agent 4: Action Generator',
-          description: 'Prepares legal complaint briefs and RTI requests from evidence.',
+          name: 'Demographic & Infrastructure Data Fusion',
+          agentLabel: 'Stage 5: Data Fusion',
+          description: 'Overlays census demographics, vulnerability indices, and public investment data.',
           status: step4,
         },
         {
           number: 6,
-          name: 'Escalation Dispatch',
-          agentLabel: 'Agent 5: Escalation',
-          description: 'Executes direct external SendGrid dispatch or PDF export.',
+          name: 'Priority Engine & Policy Recommendation',
+          agentLabel: 'Stage 6: Policy Advisor',
+          description: 'Computes deterministic priority score and generates explainable brief.',
           status: step5,
         },
       ];
@@ -108,99 +109,85 @@ export const AgentTimelineComponent: React.FC<AgentTimelineProps> = ({
 
     const status = issue?.status;
 
-    // 1. Stage 0 Verification: Completed if issue exists
+    // 1. Intake Verification: Completed if issue exists
     const stage0Status: StepState = issue ? 'completed' : 'pending';
 
-    // 2. Image Classification: Completed if issue exists
+    // 2. Evidence Trust: Completed if issue exists
     const stage1Status: StepState = issue ? 'completed' : 'pending';
 
-    // 3. Nearby Incident Match:
+    // 3. Demand Correlation: Completed if clustered
     let stage2Status: StepState = 'pending';
-    if (status === 'classified') {
-      stage2Status = 'running';
-    } else if (status === 'clustered' || status === 'drafted' || status === 'escalated') {
+    if (issue?.cluster_id) {
       stage2Status = 'completed';
+    } else if (status === 'classified') {
+      stage2Status = 'running';
     }
 
-    // 4. Impact Assessment:
+    // 4. Data Fusion: Completed if impact summary exists
     let stage3Status: StepState = 'pending';
     if (impactSummary) {
       stage3Status = 'completed';
-    } else if (status === 'clustered') {
+    } else if (stage2Status === 'completed') {
       stage3Status = 'running';
-    } else if (status === 'drafted' || status === 'escalated') {
-      stage3Status = 'completed';
     }
 
-    // 5. Official Draft Preparation:
+    // 5. Policy Formulation: Completed if action drafts / brief exist
     let stage4Status: StepState = 'pending';
-    const hasDrafts = actionDrafts && actionDrafts.length > 0;
-    if (hasDrafts || status === 'drafted' || status === 'escalated') {
+    if (actionDrafts && actionDrafts.length > 0) {
       stage4Status = 'completed';
     } else if (stage3Status === 'completed') {
       stage4Status = 'running';
     }
 
-    // 6. Escalation Dispatch:
+    // 6. Policymaker Review & Action
     let stage5Status: StepState = 'pending';
-    const activeEscalation = actionDrafts?.find((d) => d.escalation)?.escalation;
-    const hasApprovedDraft = actionDrafts?.some((d) => d.status === 'approved');
-
-    if (activeEscalation) {
-      if (activeEscalation.status === 'failed') {
-        stage5Status = 'failed';
-      } else if (activeEscalation.status === 'sent' || activeEscalation.status === 'exported') {
-        stage5Status = 'completed';
-      } else {
-        stage5Status = 'running';
-      }
-    } else if (status === 'escalated') {
+    if (status === 'approved' || status === 'escalated') {
       stage5Status = 'completed';
-    } else if (hasApprovedDraft) {
-      stage5Status = 'running';
+    } else if (stage4Status === 'completed') {
+      stage5Status = 'pending';
     }
 
     return [
       {
         number: 1,
-        name: 'Stage 0 Evidence Validation',
-        agentLabel: 'Stage 0: Validation Gate',
-        description: 'Validates resolution, blur, brightness, dhash cache, and runs Gemini Vision check.',
+        name: 'Demand Intake & Media Intake',
+        agentLabel: 'Stage 1: Intake Gateway',
+        description: 'Secures citizen voice/photo evidence and parses geographic metadata.',
         status: stage0Status,
       },
       {
         number: 2,
-        name: 'Visual Intake & Classification',
-        agentLabel: 'Agent 1: Classifier',
-        description: 'Extracts coordinates, checks clarity, and classifies issue attributes.',
+        name: 'Evidence Trust Verification',
+        agentLabel: 'Stage 2: Evidence Gate',
+        description: 'Validates resolution, media integrity, blur, and runs AI visual check.',
         status: stage1Status,
       },
       {
         number: 3,
-        name: 'Geographic Deduplication',
-        agentLabel: 'Agent 2: Geo-Scanner',
-        description: 'Triggers Haversine spatial scanner and runs duplicate matching.',
+        name: 'Demand Understanding & Structuring',
+        agentLabel: 'Stage 3: Demand Parser',
+        description: 'Extracts infrastructure need, category, and severity from multimodal signals.',
         status: stage2Status,
       },
       {
         number: 4,
-        name: 'Impact Assessment',
-        agentLabel: 'Agent 3: Impact Analyst',
-        description: 'Calculates public safety consequences on escalation threshold.',
+        name: 'Community Demand Hotspot Correlation',
+        agentLabel: 'Stage 4: Spatial Engine',
+        description: 'Triggers Haversine spatial correlation and aggregates into Demand Clusters.',
         status: stage3Status,
       },
       {
         number: 5,
-        name: 'Official Draft Preparation',
-        agentLabel: 'Agent 4: Action Generator',
-        description: 'Prepares legal complaint briefs and RTI requests from evidence.',
+        name: 'Demographic & Infrastructure Data Fusion',
+        agentLabel: 'Stage 5: Data Fusion',
+        description: 'Overlays census demographics, vulnerability indices, and public investment data.',
         status: stage4Status,
       },
       {
         number: 6,
-        name: 'Escalation Dispatch',
-        agentLabel: 'Agent 5: Escalation',
-        description: 'Executes direct external SendGrid dispatch or PDF export.',
+        name: 'Priority Engine & Policy Recommendation',
+        agentLabel: 'Stage 6: Policy Advisor',
+        description: 'Computes deterministic priority score and generates explainable brief.',
         status: stage5Status,
       },
     ];

@@ -68,10 +68,13 @@ export const useIssueDetail = (id: string) => {
 // Submit a new issue (multipart/form-data)
 export const useCreateIssue = () => {
   const queryClient = useQueryClient();
-  return useMutation<Issue, Error, { photo: File; latitude: number; longitude: number; user_note?: string }>({
-    mutationFn: async ({ photo, latitude, longitude, user_note }) => {
+  return useMutation<Issue, Error, { photo: File; audio?: File; latitude: number; longitude: number; user_note?: string }>({
+    mutationFn: async ({ photo, audio, latitude, longitude, user_note }) => {
       const formData = new FormData();
       formData.append('photo', photo);
+      if (audio) {
+        formData.append('audio', audio);
+      }
       formData.append('latitude', latitude.toString());
       formData.append('longitude', longitude.toString());
       if (user_note) {

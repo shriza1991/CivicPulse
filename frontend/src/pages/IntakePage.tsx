@@ -8,10 +8,10 @@ import { LocationPicker } from '@/components/issue/LocationPicker';
 import { AgentTimeline } from '@/components/timeline/AgentTimeline';
 import { ErrorState } from '@/components/feedback/ErrorState';
 import { WhatsAppReportBanner } from '@/components/issue/WhatsAppReportBanner';
-import { VoiceDemandInput } from '@/components/issue/VoiceDemandInput';
+import { VoiceRecorderModal } from '@/components/issue/VoiceRecorderModal';
+import type { VoiceAnalysisResult } from '@/components/issue/VoiceRecorderModal';
 import { useCreateIssue, useAnalyzeImage, useNearbyIssues } from '@/api/queries';
-import type { VoiceAnalyzeResponse } from '@/api/types';
-import { AlertCircle, FileText, CheckCircle2, ArrowRight, ArrowLeft, Send, Sparkles, MapPin, Landmark, AlertTriangle } from 'lucide-react';
+import { AlertCircle, FileText, CheckCircle2, ArrowRight, ArrowLeft, Send, Sparkles, MapPin, Landmark, AlertTriangle, Mic } from 'lucide-react';
 import axios from 'axios';
 import { demoScenarios } from '@/data/demoScenarios';
 import type { DemoScenario } from '@/data/demoScenarios';
@@ -31,7 +31,10 @@ export const IntakePage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const [photo, setPhoto] = useState<File | null>(null);
-  const [photoSource, setPhotoSource] = useState<'camera' | 'gallery'>('gallery');
+  const [voiceAudio, setVoiceAudio] = useState<File | null>(null);
+  const [voiceAnalysis, setVoiceAnalysis] = useState<VoiceAnalysisResult | null>(null);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState<boolean>(false);
+  const [photoSource, setPhotoSource] = useState<'camera' | 'gallery' | 'voice'>('gallery');
   const [locationSource, setLocationSource] = useState<string>('manual_pin');
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [userNote, setUserNote] = useState<string>('');
@@ -200,6 +203,7 @@ export const IntakePage: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
   const handleLocationLocate = useCallback((coords: { lat: number; lng: number } | null) => {
     setCoordinates((previous) => {
       if (previous?.lat === coords?.lat && previous?.lng === coords?.lng) {
@@ -207,6 +211,35 @@ export const IntakePage: React.FC = () => {
       }
       return coords;
     });
+=======
+  const handleVoiceConfirmed = (audioFile: File, analysis: VoiceAnalysisResult) => {
+    setVoiceAudio(audioFile);
+    setVoiceAnalysis(analysis);
+    setPhotoSource('voice');
+    
+    // Auto-fill user note with transcription
+    const combinedNote = analysis.english_translation && analysis.english_translation !== analysis.transcript
+      ? `${analysis.transcript} (English: ${analysis.english_translation})`
+      : analysis.transcript;
+    setUserNote(combinedNote);
+
+    if (analysis.issue_category) {
+      setIssueCategory(analysis.issue_category.toLowerCase().replace(/\s+/g, '_'));
+    }
+    if (analysis.severity) {
+      setSeverity(analysis.severity.toLowerCase());
+    }
+    if (analysis.department) {
+      setDepartment(analysis.department);
+    }
+    setAiAnalysisComplete(true);
+    setAiAvailable(true);
+    setAiConfidence(0.92);
+  };
+
+  const handleLocationLocate = (coords: { lat: number; lng: number } | null) => {
+    setCoordinates(coords);
+>>>>>>> 90dfc97 (fix(voice): remediate 15s timeout, add first-class multilingual voice demand intake, and align ontology to Nivaran)
     if (coords) {
       setFieldErrors((previous) => previous.coordinates ? { ...previous, coordinates: '' } : previous);
     }
@@ -277,6 +310,7 @@ export const IntakePage: React.FC = () => {
     try {
       const response = await createIssueMutation.mutateAsync({
         photo: photo!,
+        audio: voiceAudio || undefined,
         latitude: coordinates!.lat,
         longitude: coordinates!.lng,
         user_note: userNote.trim() || undefined,
@@ -486,49 +520,49 @@ export const IntakePage: React.FC = () => {
           
           <div className="text-center space-y-2">
             <h2 className="text-2xl font-bold text-slate-800 tracking-tight font-sans">
-              Your Report Mattered!
+              Demand Signal Registered!
             </h2>
             <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-              civicpulse has verified your evidence and initiated the automated community resolution workflow.
+              Nivaran has verified your community infrastructure demand and correlated it into regional intelligence hotspots.
             </p>
           </div>
 
           {/* AI Workflow Milestones Checklist */}
           <div className="w-full bg-slate-50 rounded-small border border-slate-200/60 p-5 space-y-4 text-xs text-slate-700">
             <h3 className="font-bold text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-200 pb-2 select-none">
-              AI Pipeline Progress Check
+              Demand Intelligence Pipeline Status
             </h3>
             
             <div className="space-y-3.5">
               <div className="flex items-start gap-3">
                 <CheckCircle2 size={16} className="text-emerald-600 mt-0.5 shrink-0" />
                 <div>
-                  <span className="font-bold block leading-tight">Original Evidence Secured</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Photo and metadata logged onto the secure ledger.</span>
+                  <span className="font-bold block leading-tight">Multimodal Evidence Secured</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">Voice transcript, photographic proof, and GPS coordinates logged.</span>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
                 <CheckCircle2 size={16} className="text-emerald-600 mt-0.5 shrink-0" />
                 <div>
-                  <span className="font-bold block leading-tight">AI Analysis Completed</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Gemini Vision validated categorisation and credibility score.</span>
+                  <span className="font-bold block leading-tight">Demand Structured & Categorized</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">AI extracted infrastructure category, severity, and urgency signals.</span>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
                 <CheckCircle2 size={16} className="text-emerald-600 mt-0.5 shrink-0" />
                 <div>
-                  <span className="font-bold block leading-tight">Spatial Deduplication Check</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Agent 2 cross-referenced location with nearby incident clusters.</span>
+                  <span className="font-bold block leading-tight">Community Hotspot Correlation</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">Spatial clustering engine linked demand with regional hotspot clusters.</span>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
                 <CheckCircle2 size={16} className="text-emerald-600 mt-0.5 shrink-0" />
                 <div>
-                  <span className="font-bold block leading-tight">Escalation Briefs Generated</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">Action Generator compiled formal RTI and municipal complaints.</span>
+                  <span className="font-bold block leading-tight">Priority Analysis Ready</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">Census demographics and infrastructure indices fused for policymaker decision-making.</span>
                 </div>
               </div>
             </div>
@@ -558,8 +592,8 @@ export const IntakePage: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col pb-10 font-sans">
       <PageHeader
-        title="Incident Report Intake"
-        subtitle="AI Civic Operations Center: Transform raw photographic evidence of infrastructure failures into verified, sendable legal complaints and RTI briefs."
+        title="Community Demand Intake"
+        subtitle="Aggregate citizen voice, text, and photographic evidence into verified infrastructure demand signals for regional planning and prioritization."
         action={
           <div className="relative inline-block text-left">
             <select
@@ -591,7 +625,7 @@ export const IntakePage: React.FC = () => {
               ))}
             </select>
             <div className="mt-1.5 text-[9px] text-slate-450 leading-tight max-w-[200px] text-right ml-auto select-none">
-              New here? Choose any demo scenario for a complete guided experience, or upload your own image to analyze a real civic issue.
+              New here? Choose any demo scenario for a complete guided experience, or record voice/photo to submit community infrastructure demand.
             </div>
           </div>
         }
@@ -609,7 +643,7 @@ export const IntakePage: React.FC = () => {
               <span className="inline-block w-8 h-8 rounded-full border-4 border-slate-200 border-t-primary animate-spin mb-2" />
             )}
             <h2 className="text-lg font-bold text-secondary-foreground font-sans tracking-tight">
-              {createIssueMutation.isSuccess ? 'Evidence Verified & Processed!' : 'Processing Case Evidence...'}
+              {createIssueMutation.isSuccess ? 'Community Demand Processed & Verified!' : 'Processing Community Demand Signal...'}
             </h2>
             <div className="flex justify-center items-center gap-4 text-xs font-semibold text-slate-500 max-w-md mx-auto py-2 bg-slate-50 border border-slate-200/60 rounded-medium shadow-sm">
               <div className="px-3 border-r border-slate-200">
@@ -617,9 +651,9 @@ export const IntakePage: React.FC = () => {
                 <span className="text-sm font-bold text-slate-750">{elapsedSeconds}s</span>
               </div>
               <div className="px-3">
-                <span className="text-[9px] uppercase tracking-wider text-slate-450 block">Status</span>
+                <span className="text-[9px] uppercase tracking-wider text-slate-450 block">Stage Status</span>
                 <span className="text-sm font-bold text-primary">
-                  {createIssueMutation.isSuccess ? 'Completed' : 'Processing...'}
+                  {createIssueMutation.isSuccess ? 'Registered' : (elapsedSeconds > 8 ? 'Correlating Hotspots...' : 'Validating Evidence...')}
                 </span>
               </div>
             </div>
@@ -637,10 +671,10 @@ export const IntakePage: React.FC = () => {
         /* Error view when submission fails */
         <div className="max-w-2xl mx-auto w-full py-12 animate-fade">
           <ErrorState
-            title="Evidence Processing Failure"
+            title="Demand Submission Notice"
             explanation={submitError}
             onRetry={handleReset}
-            retryText="Reset & Try Again"
+            retryText="Review Evidence & Retry"
           />
         </div>
       ) : (
@@ -738,9 +772,42 @@ export const IntakePage: React.FC = () => {
                         onReplace={() => setPhoto(null)}
                       />
                     ) : (
-                      <PhotoUploader onCapture={handlePhotoCapture} />
+                      <div className="space-y-3">
+                        <PhotoUploader onCapture={handlePhotoCapture} />
+                        
+                        {/* Voice Input Alternative Button */}
+                        <div className="p-4 bg-teal-50/60 border border-teal-200/80 rounded-medium flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="p-2 bg-teal-600 text-white rounded-full">
+                              <Mic size={16} />
+                            </span>
+                            <div>
+                              <span className="text-xs font-bold text-slate-800 block">
+                                {voiceAnalysis ? `Voice Note Captured (${voiceAnalysis.detected_language})` : 'Prefer speaking your community need?'}
+                              </span>
+                              <span className="text-[11px] text-slate-500">
+                                {voiceAnalysis ? `"${voiceAnalysis.transcript.slice(0, 45)}..."` : 'Record voice in Hindi, Marathi, Portuguese or English'}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setIsVoiceModalOpen(true)}
+                            className="px-3.5 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded shadow-xs transition cursor-pointer shrink-0"
+                          >
+                            {voiceAnalysis ? 'Re-record Voice' : 'Speak Demand'}
+                          </button>
+                        </div>
+                      </div>
                     )}
                   </div>
+
+                  {/* Voice Recording Modal */}
+                  <VoiceRecorderModal
+                    isOpen={isVoiceModalOpen}
+                    onClose={() => setIsVoiceModalOpen(false)}
+                    onConfirm={handleVoiceConfirmed}
+                  />
 
                   {/* WhatsApp alternative entry point — visible immediately in Step 1 */}
                   <WhatsAppReportBanner className="mt-3" />
@@ -787,17 +854,17 @@ export const IntakePage: React.FC = () => {
                 <div className="lg:col-span-7 border border-slate-200 bg-white rounded-medium p-6 space-y-4 shadow-subtle">
                   <div className="flex items-center gap-2 text-slate-700 border-b border-slate-100 pb-3">
                     <FileText size={18} className="text-primary shrink-0" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Step 3: Brief Context</span>
+                    <span className="text-xs font-bold uppercase tracking-wider">Step 3: Demand Context</span>
                   </div>
                   <p className="text-xs text-slate-500 leading-normal">
-                    Provide optional details about the context (e.g. duration of outage, specific location landmarks, hazardous risks) to ground the drafted complaint briefs.
+                    Provide optional details about your community need (e.g. seasonal flooding duration, population affected, road danger) to ground the policy recommendation brief.
                   </p>
                   
                   <textarea
                     rows={4}
                     value={userNote}
                     onChange={(e) => setUserNote(e.target.value)}
-                    placeholder="Describe specific context for official briefs..."
+                    placeholder="Describe specific community need or context..."
                     className="w-full text-sm border border-slate-250 rounded-small px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none mt-2"
                     maxLength={500}
                   />
@@ -808,7 +875,7 @@ export const IntakePage: React.FC = () => {
                 {/* Final Case Review Summary */}
                 <div className="lg:col-span-5 border border-slate-200 bg-white rounded-medium p-6 space-y-6 shadow-subtle">
                   <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider border-b border-slate-100 pb-3">
-                    Review Case File
+                    Review Demand Signal
                   </h3>
                   
                   <div className="space-y-4 text-xs">
@@ -829,7 +896,7 @@ export const IntakePage: React.FC = () => {
                     <div className="flex items-start gap-2.5 pt-3 border-t border-slate-100 text-slate-650">
                       <MapPin size={15} className="text-slate-400 shrink-0 mt-0.5" />
                       <div className="leading-tight">
-                        <span className="font-bold text-slate-700 block">{localityName || 'Coordinates Loaded'}</span>
+                        <span className="font-bold text-slate-700 block">{localityName || (coordinates ? `Lat: ${coordinates.lat.toFixed(4)}, Lng: ${coordinates.lng.toFixed(4)}` : 'Coordinates Loaded')}</span>
                         <span className="text-[10px] text-slate-400 block font-mono mt-0.5">
                           GPS: {coordinates?.lat.toFixed(6)}, {coordinates?.lng.toFixed(6)} ({locationSource})
                         </span>
@@ -858,7 +925,7 @@ export const IntakePage: React.FC = () => {
                     <div className="flex gap-2 p-3 bg-teal-50/50 border border-teal-200 rounded-small text-teal-800 leading-tight">
                       <Sparkles size={14} className="shrink-0 mt-0.5" />
                       <p className="text-[10px] font-medium font-sans">
-                        Submission triggers Agent 1 (understanding) and Agent 2 (clustering checks) synchronously. Case file details will update instantly.
+                        Submission correlates into regional Demand Hotspots, combines demographic data, and generates evidence-grounded policy briefs.
                       </p>
                     </div>
                   </div>
@@ -868,7 +935,7 @@ export const IntakePage: React.FC = () => {
                     className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-small shadow transition-all active:scale-[0.99] cursor-pointer"
                   >
                     <Send size={12} />
-                    <span>Submit to Operations Center</span>
+                    <span>Submit Community Demand Signal</span>
                   </button>
                 </div>
               </form>
