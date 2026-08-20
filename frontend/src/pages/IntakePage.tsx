@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -8,7 +8,9 @@ import { LocationPicker } from '@/components/issue/LocationPicker';
 import { AgentTimeline } from '@/components/timeline/AgentTimeline';
 import { ErrorState } from '@/components/feedback/ErrorState';
 import { WhatsAppReportBanner } from '@/components/issue/WhatsAppReportBanner';
+import { VoiceDemandInput } from '@/components/issue/VoiceDemandInput';
 import { useCreateIssue, useAnalyzeImage, useNearbyIssues } from '@/api/queries';
+import type { VoiceAnalyzeResponse } from '@/api/types';
 import { AlertCircle, FileText, CheckCircle2, ArrowRight, ArrowLeft, Send, Sparkles, MapPin, Landmark, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
 import { demoScenarios } from '@/data/demoScenarios';
@@ -198,11 +200,29 @@ export const IntakePage: React.FC = () => {
     }
   };
 
-  const handleLocationLocate = (coords: { lat: number; lng: number } | null) => {
-    setCoordinates(coords);
+  const handleLocationLocate = useCallback((coords: { lat: number; lng: number } | null) => {
+    setCoordinates((previous) => {
+      if (previous?.lat === coords?.lat && previous?.lng === coords?.lng) {
+        return previous;
+      }
+      return coords;
+    });
     if (coords) {
-      setFieldErrors((prev) => ({ ...prev, coordinates: '' }));
+      setFieldErrors((previous) => previous.coordinates ? { ...previous, coordinates: '' } : previous);
     }
+  }, []);
+
+  const handleVoiceAnalysis = (result: VoiceAnalyzeResponse) => {
+    const analysis = result.analysis;
+    const note = [
+      `Voice transcript (${analysis.detected_language}): ${result.transcript}`,
+      analysis.english_translation ? `English interpretation: ${analysis.english_translation}` : '',
+    ].filter(Boolean).join('\n\n');
+
+    setUserNote(note);
+    setIssueCategory(analysis.issue_category);
+    setSeverity(analysis.severity.toLowerCase());
+    setDepartment(analysis.department);
   };
 
   // Step controls
@@ -288,7 +308,11 @@ export const IntakePage: React.FC = () => {
           setSubmitError(data.detail?.message || data.detail || 'An unexpected error occurred. Please try again.');
         }
       } else {
-        setSubmitError('Network error. Please check your connection and try again.');
+        setSubmitError(
+          err instanceof Error
+            ? err.message
+            : 'Network error. Please check your connection and try again.'
+        );
       }
     }
   };
@@ -777,6 +801,8 @@ export const IntakePage: React.FC = () => {
                     className="w-full text-sm border border-slate-250 rounded-small px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none mt-2"
                     maxLength={500}
                   />
+
+                  <VoiceDemandInput onAnalysisComplete={handleVoiceAnalysis} />
                 </div>
 
                 {/* Final Case Review Summary */}

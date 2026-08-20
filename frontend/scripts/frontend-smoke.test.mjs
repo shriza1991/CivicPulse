@@ -31,3 +31,29 @@ test('API failures use an Error-compatible normalized type and the shared token 
   assert.match(client, /class ApiError extends Error/);
   assert.match(client, /localStorage\.getItem\('nivaran_token'\)/);
 });
+
+test('citizen intake integrates the Sarvam and Gemini voice-analysis endpoint', async () => {
+  const queries = await source('src/api/queries.ts');
+  const intake = await source('src/pages/IntakePage.tsx');
+  const voiceInput = await source('src/components/issue/VoiceDemandInput.tsx');
+
+  assert.match(queries, /apiClient\.post<VoiceAnalyzeResponse>\('\/voice\/analyze'/);
+  assert.match(queries, /timeout: 60000/);
+  assert.match(intake, /VoiceDemandInput/);
+  assert.match(intake, /English interpretation:/);
+  assert.match(intake, /useCallback\(\(coords/);
+  assert.match(voiceInput, /navigator\.mediaDevices\.getUserMedia/);
+  assert.match(voiceInput, /Read interpretation aloud/);
+});
+
+test('photo upload validation matches the JPEG and PNG backend contract', async () => {
+  const uploader = await source('src/components/issue/PhotoUploader.tsx');
+  assert.match(uploader, /const validTypes = \['image\/jpeg', 'image\/jpg', 'image\/png'\]/);
+  assert.doesNotMatch(uploader, /image\/webp/);
+});
+
+test('intake surfaces normalized API errors instead of calling them network failures', async () => {
+  const intake = await source('src/pages/IntakePage.tsx');
+  assert.match(intake, /err instanceof Error/);
+  assert.match(intake, /\? err\.message/);
+});

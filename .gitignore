@@ -30,6 +30,10 @@ static/uploads/*
 !static/uploads/.gitkeep
 static/downloads/*
 !static/downloads/.gitkeep
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+backend/static/downloads/*
+!backend/static/downloads/.gitkeep
 
 # IDEs
 .idea/

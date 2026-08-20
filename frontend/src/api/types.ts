@@ -99,3 +99,20 @@ export interface AIUnavailableError {
   error: 'ai_unavailable';
   retryable: boolean;
 }
+
+export interface VoiceAnalysis {
+  detected_language: string;
+  english_translation: string;
+  issue_category: string;
+  issue_subcategory: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  department: string;
+  priority_score: number;
+  summary: string;
+}
+
+export interface VoiceAnalyzeResponse {
+  success: boolean;
+  transcript: string;
+  analysis: VoiceAnalysis;
+}

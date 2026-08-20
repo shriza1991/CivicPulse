@@ -8,6 +8,7 @@ import type {
   Escalation,
   DraftsListResponse,
   ImpactSummary,
+  VoiceAnalyzeResponse,
 } from './types';
 
 export interface PublicConfig {
@@ -239,6 +240,26 @@ export const useAnalyzeImage = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        // Gemini may use two 20-second attempts before the backend returns a final result.
+        timeout: 60000,
+      });
+      return response.data;
+    },
+  });
+};
+
+// Submit recorded or selected audio to the Sarvam STT + Gemini demand-understanding pipeline.
+export const useAnalyzeVoice = () => {
+  return useMutation<VoiceAnalyzeResponse, Error, { audio: File }>({
+    mutationFn: async ({ audio }) => {
+      const formData = new FormData();
+      formData.append('audio', audio);
+      const response = await apiClient.post<VoiceAnalyzeResponse>('/voice/analyze', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        // Sarvam transcription plus Gemini translation/classification can exceed the global API timeout.
+        timeout: 60000,
       });
       return response.data;
     },
@@ -259,4 +280,3 @@ export const useNearbyIssues = (lat?: number, lng?: number, radius: number = 200
     enabled: !!lat && !!lng,
   });
 };
-

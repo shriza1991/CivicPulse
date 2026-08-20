@@ -70,8 +70,8 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
   const validateAndProcessFile = async (file: File, source: 'camera' | 'gallery') => {
     setError(null);
 
-    // Validate type (JPG/PNG only)
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    // Keep client validation aligned with the backend Stage 0 intake contract.
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!validTypes.includes(file.type)) {
       setError('Invalid file type. Please upload a JPG or PNG image.');
       return;
@@ -126,7 +126,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
       <input
         ref={galleryInputRef}
         type="file"
-        accept="image/png, image/jpeg, image/jpg, image/webp"
+        accept="image/png, image/jpeg, image/jpg"
         className="hidden"
         onChange={(e) => handleFileChange(e, 'gallery')}
         disabled={resizing}
@@ -205,7 +205,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
               Or drag and drop photo file here
             </p>
             <p className="text-[10px] text-slate-400 font-normal font-sans">
-              PNG, JPG, JPEG or WebP up to 15MB
+              PNG, JPG, or JPEG up to 15MB
             </p>
           </div>
         )}
