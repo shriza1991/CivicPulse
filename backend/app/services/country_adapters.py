@@ -1,10 +1,8 @@
 """
-country_adapters.py — Cross-Border Country Adapter Registry (Phase 9)
+country_adapters.py — Modular Country Adapter Registry
 
-Provides dynamic country configuration and data adapters for:
-  - India (IND): INR, Hindi/English, Mumbai context
-  - Brazil (BRA): BRL, Portuguese/English, São Paulo context
-  - South Africa (ZAF): ZAR, Zulu/English, Gauteng context
+India (IND) is the primary demonstrated production context.
+Brazil (BRA) and South Africa (ZAF) provide modular adapters demonstrating cross-border architectural portability.
 """
 from typing import Dict, Any, Optional, List
 from pydantic import BaseModel

@@ -686,7 +686,7 @@ export const IntakePage: React.FC = () => {
             </span>
             <div className="space-y-1">
               <h3 className="text-xs font-bold text-slate-800 tracking-tight uppercase flex items-center gap-2">
-                <span>AI Civic Operations Intake Portal</span>
+                <span>Community Demand Intake Portal</span>
                 {locationSource && (
                   <span className="text-[9px] px-2 py-0.5 rounded-full bg-slate-100 font-mono text-slate-600 border border-slate-200">
                     Source: {photoSource} / {locationSource}
@@ -694,7 +694,7 @@ export const IntakePage: React.FC = () => {
                 )}
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Provide verifiable visual evidence of municipal infrastructure problems. civicpulse translates citizen reports into compiled audit trails and sendable legal briefs, bypassing administrative delays.
+                Provide verifiable voice or visual evidence of community infrastructure needs. Nivaran translates citizen signals into verified demand hotspots, fusing local data to support national and state infrastructure planning.
               </p>
             </div>
           </div>

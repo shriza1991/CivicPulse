@@ -258,17 +258,17 @@ export const DemandHotspotWorkspace: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <Flame className="w-6 h-6 text-primary-700 animate-pulse" />
-            <h1 className="text-2xl font-bold text-neutral-900">Demand Hotspots Console</h1>
+            <h1 className="text-2xl font-bold text-neutral-900">India Community Demand Hotspots</h1>
             <span className="text-xs font-semibold uppercase tracking-wider text-primary-700 bg-primary-50 px-2.5 py-1 rounded-full border border-primary-200">
-              Policymaker Intelligence
+              National & State Policymaker Console
             </span>
           </div>
           <p className="text-sm text-neutral-600 mt-1">
-            Prioritize infrastructure investments based on fused citizen demand, demographic vulnerability, and asset condition.
+            Prioritize public infrastructure projects by fusing citizen demand signals with Indian census demographics, infrastructure deficit indices, and budget plans.
           </p>
         </div>
 
-        {/* Cross-Border Country Selector */}
+        {/* Region & Cross-Border Adapter Selector */}
         <div className="flex items-center gap-2 bg-neutral-100 p-1.5 rounded-lg border border-neutral-200">
           <Globe className="w-4 h-4 text-neutral-500 ml-1.5" />
           <button
@@ -277,23 +277,25 @@ export const DemandHotspotWorkspace: React.FC = () => {
               selectedCountry === 'IND' ? 'bg-white text-primary-700 shadow-sm font-semibold' : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
-            🇮🇳 India (IND)
+            🇮🇳 India (Primary)
           </button>
           <button
             onClick={() => { setSelectedCountry('BRA'); setSelectedClusterId(null); }}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              selectedCountry === 'BRA' ? 'bg-white text-primary-700 shadow-sm font-semibold' : 'text-neutral-600 hover:text-neutral-900'
+            className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-all ${
+              selectedCountry === 'BRA' ? 'bg-white text-primary-700 shadow-sm font-semibold' : 'text-neutral-500 hover:text-neutral-800'
             }`}
+            title="Cross-border architecture portability preview"
           >
-            🇧🇷 Brazil (BRA)
+            🇧🇷 Brazil (Adapter)
           </button>
           <button
             onClick={() => { setSelectedCountry('ZAF'); setSelectedClusterId(null); }}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              selectedCountry === 'ZAF' ? 'bg-white text-primary-700 shadow-sm font-semibold' : 'text-neutral-600 hover:text-neutral-900'
+            className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-all ${
+              selectedCountry === 'ZAF' ? 'bg-white text-primary-700 shadow-sm font-semibold' : 'text-neutral-500 hover:text-neutral-800'
             }`}
+            title="Cross-border architecture portability preview"
           >
-            🇿🇦 South Africa (ZAF)
+            🇿🇦 South Africa (Adapter)
           </button>
         </div>
       </div>

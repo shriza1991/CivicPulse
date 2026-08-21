@@ -16,15 +16,15 @@ export const LandingHero: React.FC<LandingHeroProps> = ({ onStartReport, onBrows
         <div className="relative z-10 space-y-3 max-w-xl">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-white/10 text-teal-200 text-xs font-medium backdrop-blur-xs">
             <ShieldCheck className="w-4 h-4 text-teal-300" />
-            <span>Public Evidence Infrastructure Platform</span>
+            <span>Digital Public Infrastructure for India</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">
-            Turn Public Evidence Into Official Municipal Action
+            Turn Citizen Voices Into High-Priority Infrastructure Action
           </h1>
 
           <p className="text-sm text-teal-100/90 leading-relaxed">
-            Report civic hazards, track cryptographic evidence chains, and audit municipal repairs with community verification.
+            Report community infrastructure needs via voice or photo. Nivaran combines citizen signals with Indian demographic and infrastructure data to recommend priority development projects.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -34,7 +34,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({ onStartReport, onBrows
               leadingIcon={<Plus className="w-5 h-5" />}
               className="bg-white text-primary-700 hover:bg-neutral-100 font-semibold"
             >
-              Report Civic Issue
+              Report Community Need
             </Button>
 
             {onBrowseMap && (

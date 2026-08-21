@@ -1,69 +1,83 @@
-# PRODUCT CONTRACT — Permanent Product Definition
+# PRODUCT CONTRACT — Canonical Product Definition
 
-## Canonical Identity
-- **Product Name**: Nivaran — Community Demand Intelligence
-- **Product Thesis**: Nivaran is the intelligence layer between fragmented community demand signals and national infrastructure planning.
-
----
-
-## User Personas & Roles
-
-### Primary User
-- **Government Planner / Policymaker**: Uses consolidated community demand hotspots and data fusion to prioritize infrastructure investments and draft policy recommendations.
-
-### Secondary Users
-- **District / Municipal Planners**: Inspect local ward-level demand clusters and evidence ledgers.
-- **Infrastructure Officials & Evaluators**: Review evidence trust scores, verify citizen inputs, and audit public spending impact.
-
-### Citizen Role
-- **Demand Provider & Beneficiary**: Provides structured voice, text, or photo demand signals via web, WhatsApp, or mobile web channels.
+**Product Identity**: Nivaran — Community Demand Intelligence  
+**Core Positioning**: *"Built for India. Designed to adapt beyond India."*  
+**Document Authority**: Level 2 (Product Truth)  
 
 ---
 
-## Architecture Foundations
+## 1. Core Product Thesis
 
-### Hero Object
-- **Demand Cluster / Demand Hotspot**: Aggregated spatial-semantic cluster of verified citizen demand signals enriched with census demographics and infrastructure indices.
+Nivaran is **not** a complaint ticketing system, a generic chatbot, or an autonomous government decision-maker.
 
-### Core Decision Question
-> *“What infrastructure need should policymakers prioritize, where, and why?”*
+Nivaran **is** an intelligent decision-support layer that bridges fragmented citizen demand signals and public infrastructure planning across India.
 
-### Core Output
-- **Evidence-Backed Infrastructure Priority & Policy Recommendation Brief**: Grounded in deterministic metrics and summarized via Google Gemini reasoning.
-
----
-
-## Core Product Loop
 ```
-Citizen Voice / Text / Photo Demand
-   │
-   ▼
-Structured Demand & Evidence Trust Gate (EXIF, Hash, Verification)
-   │
-   ▼
-Semantic & Spatial Correlation (PostGIS / Vector Matching)
-   │
-   ▼
-Demand Cluster / Hotspot Generation
-   │
-   ▼
-Demographic, Infrastructure & Investment Data Fusion
-   │
-   ▼
-Deterministic Priority & Impact Scoring
-   │
-   ▼
-Google Gemini Policy Reasoning & Recommendation Generation
-   │
-   ▼
-Human-Reviewed Policymaker Action Brief
+Citizen Voice / Text / Messaging / Photo
+                  ↓
+          Demand Understanding (Sarvam + Gemini)
+                  ↓
+          Evidence Trust & Verification Gate
+                  ↓
+          Semantic & Spatial Clustering
+                  ↓
+          Demand Hotspot (Hero Object)
+                  ↓
+          Indian Data Fusion (Census + Asset Indices + Budgets)
+                  ↓
+          Deterministic Priority Score (Mathematical & Transparent)
+                  ↓
+          Google Gemini Policy Reasoning (Structured Intervention Briefs)
+                  ↓
+          Human Review (Policymaker / Ward Officer)
+                  ↓
+          High-Priority Infrastructure Action
 ```
 
 ---
 
-## Boundary Definitions (What Nivaran IS NOT)
-- **NOT** a generic AI chatbot or conversational interface.
-- **NOT** a individual complaint/grievance ticketing system.
-- **NOT** an automated complaint tracker or municipal helpdesk.
-- **NOT** a static analytics dashboard without actionable policy synthesis.
-- **NOT** an autonomous policy execution engine (human approval is strictly mandatory).
+## 2. Target Users
+
+1. **National & State Infrastructure Policymakers**: Discover high-density community demand hotspots, review demographic vulnerability correlations, and evaluate evidence-backed intervention options.
+2. **District & Municipal Ward Planners**: Inspect local infrastructure deficit indices, evaluate citizen voice recordings, and review AI-drafted policy briefs.
+3. **Citizens & Communities**: Report infrastructure needs in local Indian languages via voice, photo, text, or WhatsApp, and track community priority aggregation.
+
+---
+
+## 3. AI & Deterministic Architecture Responsibilities
+
+| Subsystem | Technology | Responsibility | Guarantee |
+|---|---|---|---|
+| **Multilingual Voice Intake** | Sarvam AI STT | Ingest spoken citizen demand in Hindi, Marathi, English, and regional languages | Fast, accurate speech-to-text without manual typing barrier |
+| **Demand Understanding** | Google Gemini 2.5 | Extract structured categories, severity signals, and problem descriptions | Multimodal visual verification & language classification |
+| **Data Fusion & Priority** | Nivaran Deterministic Engine | Calculate spatial clusters, demographic vulnerability weights, and numerical priority scores | 100% reproducible mathematical scoring (never fabricated by an LLM) |
+| **Policy Reasoning** | Google Gemini 2.5 | Synthesize policy briefs, cite specific evidence, identify funding pathways, and evaluate risks | Schema-enforced structured outputs with transparent provenance |
+| **Final Authority** | Human Decision-Maker | Approve, modify, or reject proposed infrastructure interventions | Human oversight remains mandatory |
+
+---
+
+## 4. India Scalability Model
+
+Nivaran scales seamlessly across India's federal structure:
+```
+National Planning (National Infrastructure Pipeline / NITI Aayog)
+       ↑
+State Infrastructure Boards (e.g. Maharashtra, Karnataka, Delhi)
+       ↑
+District Planning Committees (DPCs)
+       ↑
+Municipal Corporations & Wards (e.g. MCGM K-East, BBMP Mahadevapura)
+       ↑
+Community Demand Signals (Citizens / Resident Associations)
+```
+
+---
+
+## 5. Cross-Border Architecture Principle
+
+While **India is the primary demonstrated production context**, Nivaran is engineered with decoupled adapter interfaces:
+- **Country Adapter** (`CountryConfig`): Currency, regional hierarchy, and coordinate bounds.
+- **Language Adapter**: Speech models and translation pipelines.
+- **Data Fusion Adapter**: Local census schemas and public asset registries.
+
+This modular design guarantees that the intelligence core can be ported to other BRICS contexts in the future without modifying core algorithms.

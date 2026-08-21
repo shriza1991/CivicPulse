@@ -1,23 +1,24 @@
-# Nivaran Gemini/Agent Context
+# Nivaran Gemini / Agent Context
 
 Use `AGENTS.md` as the authoritative repository-wide engineering instruction.
 
+**Product Identity**: **Nivaran — Community Demand Intelligence**  
+**Core Positioning**: *"Built for India. Designed to adapt beyond India."*  
+
 Before coding:
 - Read `AGENTS.md`.
-- Read `docs/hackathon/00_MASTER_CONTEXT.md`.
-- Read only the specification files relevant to the current task.
-- Inspect the existing code before editing.
-
-Never infer product requirements from old UI alone. The current product is **Nivaran — Community Demand Intelligence**.
+- Read `docs/hackathon/HACKATHON_CONTRACT.md`.
+- Read `docs/hackathon/PRODUCT_CONTRACT.md`.
+- Inspect existing code before editing.
 
 Primary flow:
-Citizen voice/text/photo
-→ structured demand
+Citizen voice / text / photo
+→ structured demand (Sarvam + Gemini)
 → evidence trust
 → semantic/spatial correlation
-→ demand cluster
-→ demographic/infrastructure/investment enrichment
-→ deterministic priority score
+→ demand hotspot
+→ Indian demographic / infrastructure / investment data fusion
+→ deterministic priority score (0–100)
 → Gemini policy reasoning
 → human-reviewed recommendation.
 
