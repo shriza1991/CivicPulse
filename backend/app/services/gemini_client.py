@@ -152,12 +152,12 @@ class GeminiClient:
         system_instruction: Optional[str] = None,
         image_data: Optional[bytes] = None,
         image_mime_type: Optional[str] = None,
-        timeout: float = 20.0,
+        timeout: float = 60.0,
     ) -> T:
         """
         Generates structured JSON output from Gemini matching response_schema.
         Supports Round-Robin key pooling, per-key cooldowns, and automatic 429 failover.
-        Default timeout is 20.0 seconds.
+        Default timeout is 60.0 seconds.
         """
         contents = [prompt]
         if image_data:
@@ -191,6 +191,22 @@ class GeminiClient:
 
             key_index_str = str(key_state.index) if key_state else "mock/custom"
             start_time = time.time()
+
+            img_dims = None
+            if image_data:
+                try:
+                    from PIL import Image
+                    import io
+                    with Image.open(io.BytesIO(image_data)) as img:
+                        img_dims = f"{img.width}x{img.height}"
+                except Exception:
+                    img_dims = "invalid/unknown"
+
+            logger.info(
+                f"gemini_pre_generate_content | model={settings_model()} | timeout={timeout}s | "
+                f"mime_type={image_mime_type or 'N/A'} | byte_size={len(image_data) if image_data else 0} | "
+                f"is_empty={not bool(image_data and len(image_data) > 0)} | dimensions={img_dims or 'N/A'}"
+            )
 
             try:
                 # Call async API under client.aio.models

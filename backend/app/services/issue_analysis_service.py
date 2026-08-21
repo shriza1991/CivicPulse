@@ -99,7 +99,7 @@ class IssueAnalysisService:
                 prompt=prompt,
                 response_schema=IssueAnalysis,
                 system_instruction=SYSTEM_PROMPT,
-                timeout=20.0
+                timeout=60.0
             )
             logger.info("issue_analysis_service | Gemini analysis completed successfully")
             return analysis_result.model_dump()

@@ -168,6 +168,7 @@ class LocalStorageProvider(StorageProvider):
         return f"/static/uploads/{filename}"
 
     def health_check(self) -> bool:
+        os.makedirs(self.upload_dir, exist_ok=True)
         return os.path.exists(self.upload_dir) and os.access(self.upload_dir, os.W_OK)
 
 

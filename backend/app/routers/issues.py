@@ -176,7 +176,7 @@ async def analyze_image_endpoint(
             response_schema=GeminiAutoFillResult,
             image_data=photo_bytes,
             image_mime_type=photo.content_type or "image/jpeg",
-            timeout=20.0
+            timeout=60.0
         )
         return AnalyzeImageResponse(
             ai_available=True,
