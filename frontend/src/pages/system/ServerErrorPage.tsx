@@ -10,7 +10,7 @@ export const ServerErrorPage: React.FC = () => {
       <div className="max-w-md w-full">
         <ErrorState
           title="Internal Server Error (500)"
-          description="The civicpulse backend service encountered an unexpected condition. Local draft data remains safe."
+          description="The CommonGround backend service encountered an unexpected condition. Local draft data remains safe."
           onRetry={() => window.location.reload()}
           retryLabel="Retry Connection"
         />

@@ -3,6 +3,7 @@ import { Surface } from '../../../design-system/primitives/foundation/Surface';
 import { StatusChip } from '../../../design-system/composites/status/StatusChip';
 import { MapPin, Clock, ShieldCheck } from 'lucide-react';
 import type { Issue } from '../../../api/types';
+import { getImageUrl, FALLBACK_PLACEHOLDER } from '../../../utils/getImageUrl';
 
 export interface CaseCardProps {
   issue: Issue;
@@ -23,7 +24,7 @@ export const CaseCard: React.FC<CaseCardProps> = ({ issue, onSelect, className }
         <div>
           <span className="text-xs font-mono font-bold text-neutral-700">{issue.id}</span>
           <h3 className="text-base font-semibold text-neutral-900 line-clamp-1 mt-0.5">
-            {issue.description || `${issue.issue_type.replace('_', ' ').toUpperCase()} Hazard`}
+            {issue.description || `${issue.issue_type.replace('_', ' ').toUpperCase()} Demand`}
           </h3>
         </div>
 
@@ -35,8 +36,16 @@ export const CaseCard: React.FC<CaseCardProps> = ({ issue, onSelect, className }
       </div>
 
       {issue.photo_url && (
-        <div className="relative rounded-md overflow-hidden bg-neutral-900 aspect-video max-h-48 border border-neutral-200">
-          <img src={issue.photo_url} alt={issue.description || 'Case photo'} className="object-cover w-full h-full" />
+        <div className="relative rounded-md overflow-hidden bg-neutral-100 aspect-video max-h-48 border border-neutral-200 flex items-center justify-center">
+          <img
+            src={getImageUrl(issue.photo_url)}
+            alt={issue.description || 'Demand evidence photo'}
+            className="object-cover w-full h-full"
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = FALLBACK_PLACEHOLDER;
+            }}
+          />
         </div>
       )}
 
@@ -59,7 +68,7 @@ export const CaseCard: React.FC<CaseCardProps> = ({ issue, onSelect, className }
         </span>
 
         <span className="text-primary-700 font-semibold group-hover:underline">
-          View Case & Timeline →
+          View Demand Intelligence →
         </span>
       </div>
     </Surface>

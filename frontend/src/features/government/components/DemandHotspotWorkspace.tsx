@@ -246,7 +246,7 @@ export const DemandHotspotWorkspace: React.FC = () => {
   }
 
   if (isErrorClusters) {
-    return <ErrorState title="Failed to load Demand Intelligence" description="Unable to connect to Nivaran backend." />;
+    return <ErrorState title="Failed to load Demand Intelligence" description="Unable to connect to CommonGround backend." />;
   }
 
   const activeCluster = clusters.find((c: ClusterItem) => c.id === activeClusterId) || clusters[0];

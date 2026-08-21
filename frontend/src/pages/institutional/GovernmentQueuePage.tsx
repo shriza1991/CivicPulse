@@ -14,7 +14,7 @@ import { Button } from '../../design-system/primitives/buttons/Button';
 import { Flame, LayoutGrid, Table, Layers } from 'lucide-react';
 
 export const GovernmentQueuePage: React.FC = () => {
-  usePageTitle('Policymaker Intelligence Workspace — Nivaran Community Demand');
+  usePageTitle('Community Demand Hotspots — CommonGround');
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useIssues();
   const { filters, selectedIds, updateFilters, toggleSelect, selectAll, clearSelection } = useGovernmentQueueStore();
@@ -35,7 +35,7 @@ export const GovernmentQueuePage: React.FC = () => {
     return (
       <ErrorState
         title="Failed to load demand intelligence workspace"
-        description="Could not connect to Nivaran backend services."
+        description="Could not connect to CommonGround backend services."
         onRetry={() => refetch()}
       />
     );

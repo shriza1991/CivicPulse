@@ -16,16 +16,11 @@ interface IssueMapProps {
   className?: string;
 }
 
-const getIssueTypeColor = (type: string): string => {
-  switch (type) {
-    case 'road_damage': return '#EF4444';      // Red
-    case 'street_lighting': return '#F59E0B';  // Gold
-    case 'garbage': return '#F97316';          // Orange
-    case 'water': return '#3B82F6';            // Blue
-    case 'footpath': return '#10B981';         // Green
-    case 'dumping': return '#8B5CF6';          // Purple
-    default: return '#64748B';                 // Slate
-  }
+const getDemandPriorityColor = (severity: number): string => {
+  if (severity >= 4) return '#DC2626'; // High / Critical Priority
+  if (severity === 3) return '#EA580C'; // Elevated Priority
+  if (severity === 2) return '#D97706'; // Moderate Priority
+  return '#0D9488'; // Standard Need (Teal)
 };
 
 export const IssueMap: React.FC<IssueMapProps> = ({
@@ -107,20 +102,17 @@ export const IssueMap: React.FC<IssueMapProps> = ({
   // Supercluster instance
   const supercluster = useMemo(() => {
     const sc = new Supercluster({
-      radius: 50,
+      radius: 45,
       maxZoom: 16,
     });
     sc.load(geojsonFeatures as any);
     return sc;
   }, [geojsonFeatures]);
 
-  // Initialize MapLibre GL Map Instance
+  // Initialize MapLibre GL Map Instance with India Nationwide Scope
   useEffect(() => {
-    console.log('[MapLibre Debug] Component mounted');
-
     const isSupported = typeof window !== 'undefined' && (!!window.WebGLRenderingContext || !!(window as any).WebGL2RenderingContext);
     if (!isSupported) {
-      console.warn('[MapLibre Debug] WebGL is not supported in this browser environment');
       setWebGlSupported(false);
       return;
     }
@@ -128,12 +120,6 @@ export const IssueMap: React.FC<IssueMapProps> = ({
     const container = mapContainerRef.current;
     if (!container) return;
     if (mapRef.current) return;
-
-    const rect = container.getBoundingClientRect();
-    console.log('[MapLibre Debug] Host element:', container);
-    console.log('[MapLibre Debug] Host size:', { width: rect.width, height: rect.height, rect });
-    console.log('[MapLibre Debug] Supported WebGL:', isSupported);
-    console.log('[MapLibre Debug] Constructing MapLibre map instance...');
 
     try {
       const map = new maplibregl.Map({
@@ -147,7 +133,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
               ],
               tileSize: 256,
-              attribution: '© OpenStreetMap contributors'
+              attribution: '© OpenStreetMap contributors | CommonGround DPI'
             }
           },
           layers: [
@@ -160,28 +146,16 @@ export const IssueMap: React.FC<IssueMapProps> = ({
             }
           ]
         },
-        center: [72.8777, 19.0760], // Mumbai Center [lng, lat]
-        zoom: 12,
+        center: [78.9629, 20.5937], // India Nationwide Center [lng, lat]
+        zoom: 4.5,
         maxZoom: 18,
-        minZoom: 2,
+        minZoom: 3,
         attributionControl: false,
       });
 
-      console.log('[MapLibre Debug] Map constructed successfully:', map);
-
       map.on('load', () => {
-        console.log('[MapLibre Debug] Event: load');
         map.resize();
-        const canvas = container.querySelector('.maplibregl-canvas') as HTMLCanvasElement | null;
-        const controls = container.querySelector('.maplibregl-control-container');
-        console.log('[MapLibre Debug] DOM Check - Canvas exists:', !!canvas, 'Dimensions:', canvas?.width, 'x', canvas?.height);
-        console.log('[MapLibre Debug] DOM Check - Controls exist:', !!controls);
       });
-
-      map.on('style.load', () => console.log('[MapLibre Debug] Event: style.load'));
-      map.on('idle', () => console.log('[MapLibre Debug] Event: idle'));
-      map.on('error', (e) => console.error('[MapLibre Debug] Event: error', e));
-      map.on('webglcontextlost', (e) => console.error('[MapLibre Debug] Event: webglcontextlost', e));
 
       map.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'bottom-right');
       map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
@@ -189,7 +163,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
       popupRef.current = new maplibregl.Popup({
         closeButton: true,
         closeOnClick: false,
-        maxWidth: '240px',
+        maxWidth: '260px',
       });
 
       mapRef.current = map;
@@ -203,7 +177,6 @@ export const IssueMap: React.FC<IssueMapProps> = ({
       resizeObserver.observe(container);
 
       return () => {
-        console.log('[MapLibre Debug] Cleanup triggered, removing map instance');
         resizeObserver.disconnect();
         if (mapRef.current) {
           mapRef.current.remove();
@@ -212,7 +185,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
         setMapReady(false);
       };
     } catch (err) {
-      console.error('[MapLibre Debug] Map constructor exception:', err);
+      console.error('[MapLibre] Map constructor exception:', err);
     }
   }, []);
 
@@ -245,7 +218,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
 
       if (isCluster) {
         const pointCount = (cluster.properties as any).point_count;
-        const size = Math.min(30 + pointCount * 3, 56);
+        const size = Math.min(32 + pointCount * 3, 58);
 
         el.style.width = `${size}px`;
         el.style.height = `${size}px`;
@@ -256,9 +229,9 @@ export const IssueMap: React.FC<IssueMapProps> = ({
         el.style.display = 'flex';
         el.style.alignItems = 'center';
         el.style.justifyContent = 'center';
-        el.style.fontWeight = '700';
+        el.style.fontWeight = '800';
         el.style.fontSize = '12px';
-        el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+        el.style.boxShadow = '0 4px 14px rgba(0,0,0,0.3)';
         el.innerText = pointCount.toString();
 
         el.addEventListener('click', () => {
@@ -274,13 +247,13 @@ export const IssueMap: React.FC<IssueMapProps> = ({
         });
       } else {
         const props = cluster.properties as any;
-        const typeColor = getIssueTypeColor(props.issueType);
+        const priorityColor = getDemandPriorityColor(props.maxSeverity);
         const reportCount = props.reportCount;
 
         el.style.width = '32px';
         el.style.height = '32px';
         el.style.borderRadius = '50%';
-        el.style.backgroundColor = typeColor;
+        el.style.backgroundColor = priorityColor;
         el.style.border = '2.5px solid #FFFFFF';
         el.style.color = '#FFFFFF';
         el.style.display = 'flex';
@@ -288,8 +261,8 @@ export const IssueMap: React.FC<IssueMapProps> = ({
         el.style.justifyContent = 'center';
         el.style.fontWeight = '800';
         el.style.fontSize = '11px';
-        el.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-        el.innerText = reportCount > 1 ? reportCount.toString() : '•';
+        el.style.boxShadow = '0 4px 10px rgba(0,0,0,0.25)';
+        el.innerText = reportCount > 1 ? reportCount.toString() : '★';
 
         el.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -299,26 +272,32 @@ export const IssueMap: React.FC<IssueMapProps> = ({
           const primary = group.primary;
           const reports = group.reports;
           const avgSeverity = (reports.reduce((sum: number, r: Issue) => sum + r.severity, 0) / reports.length).toFixed(1);
+          const locality = getLocalityName(primary.latitude, primary.longitude);
 
           const popupContent = `
-            <div style="font-family: system-ui, sans-serif; padding: 2px; font-size: 11px; color: #334155;">
-              <div style="height: 95px; width: 100%; border-radius: 6px; overflow: hidden; background-color: #f1f5f9; margin-bottom: 6px;">
-                <img src="${getImageUrl(primary.photo_url)}" style="width: 100%; height: 100%; object-fit: cover;" />
-              </div>
-              <div style="font-weight: 700; font-size: 12px; color: #0f172a; margin-bottom: 2px;">
+            <div style="font-family: system-ui, sans-serif; padding: 2px; font-size: 11px; color: #1e293b;">
+              ${primary.photo_url ? `
+                <div style="height: 90px; width: 100%; border-radius: 6px; overflow: hidden; background-color: #f1f5f9; margin-bottom: 6px;">
+                  <img src="${getImageUrl(primary.photo_url)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.style.display='none';" />
+                </div>
+              ` : ''}
+              <div style="font-weight: 800; font-size: 12px; color: #0f172a; margin-bottom: 2px;">
                 ${humanizeIssueType(primary.issue_type, primary.description)}
               </div>
-              <div style="color: #64748b; font-size: 10px; font-weight: 500; margin-bottom: 6px;">
-                📍 ${getLocalityName(primary.latitude, primary.longitude)}
+              <div style="color: #475569; font-size: 10px; font-weight: 600; margin-bottom: 6px;">
+                📍 ${locality}
               </div>
-              <div style="display: flex; gap: 4px; margin-bottom: 6px;">
-                <span style="font-size: 8.5px; font-weight: 800; padding: 2px 5px; border-radius: 4px; background: #f8fafc; border: 1px solid #e2e8f0; text-transform: uppercase;">
-                  Severity ${avgSeverity}/5
+              <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px;">
+                <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; text-transform: uppercase;">
+                  Priority ${avgSeverity}/5
                 </span>
-                <span style="font-size: 8.5px; font-weight: 800; padding: 2px 5px; border-radius: 4px; color: #0d9488; background: #f0fdfa; border: 1px solid #ccfbf1; text-transform: uppercase;">
-                  ${primary.status}
+                <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; color: #0f766e; background: #f0fdfa; border: 1px solid #ccfbf1;">
+                  ${reports.length} Signal${reports.length > 1 ? 's' : ''}
                 </span>
               </div>
+              <p style="font-size: 10px; color: #64748b; line-height: 1.3; margin: 0;">
+                ${primary.description ? primary.description.slice(0, 95) + '...' : 'Verified community infrastructure need.'}
+              </p>
             </div>
           `;
 
@@ -367,9 +346,9 @@ export const IssueMap: React.FC<IssueMapProps> = ({
     });
 
     if (groupedData.length === 1) {
-      map.flyTo({ center: [groupedData[0].longitude, groupedData[0].latitude], zoom: 14 });
+      map.flyTo({ center: [groupedData[0].longitude, groupedData[0].latitude], zoom: 12 });
     } else {
-      map.fitBounds(bounds, { padding: 40, maxZoom: 15 });
+      map.fitBounds(bounds, { padding: 50, maxZoom: 14 });
     }
   }, [groupedData]);
 
@@ -382,7 +361,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
     if (targetGroup) {
       map.flyTo({
         center: [targetGroup.longitude, targetGroup.latitude],
-        zoom: 15,
+        zoom: 14,
         duration: 800,
       });
     }
@@ -397,7 +376,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
       (pos) => {
         map.flyTo({
           center: [pos.coords.longitude, pos.coords.latitude],
-          zoom: 15,
+          zoom: 14,
           duration: 1000,
         });
       },
@@ -407,13 +386,37 @@ export const IssueMap: React.FC<IssueMapProps> = ({
 
   if (!webGlSupported) {
     return (
-      <div className={className} style={{ position: 'relative', width: '100%', height: '100%', minHeight: '300px' }}>
-        <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 p-6 text-center text-slate-700 font-sans space-y-3">
-          <AlertTriangle className="w-10 h-10 text-amber-500" />
-          <h4 className="font-bold text-base text-slate-800">WebGL Vector Map Fallback</h4>
-          <p className="text-xs text-slate-500 max-w-md leading-relaxed">
-            Vector graphics (WebGL) are not supported by your browser session. Please review the reports list directly.
-          </p>
+      <div className={className} style={{ position: 'relative', width: '100%', height: '100%', minHeight: '340px' }}>
+        <div className="w-full h-full flex flex-col p-6 bg-slate-50 border border-slate-200 rounded-xl font-sans overflow-y-auto space-y-4">
+          <div className="flex items-center gap-2 text-slate-800 border-b border-slate-200 pb-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+            <div>
+              <h4 className="font-bold text-sm">Demand List View (Map Fallback)</h4>
+              <p className="text-xs text-slate-500">Vector map unavailable in this browser session. Showing verified demand priorities.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {groupedData.slice(0, 8).map((g) => (
+              <div
+                key={g.key}
+                onClick={() => onSelectIssue(g.primary.id)}
+                className="p-3 bg-white border border-slate-200 rounded-lg shadow-xs hover:border-teal-500 cursor-pointer space-y-1.5"
+              >
+                <div className="flex justify-between items-center text-xs font-bold text-slate-900">
+                  <span>{humanizeIssueType(g.primary.issue_type, g.primary.description)}</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-teal-50 text-teal-800 border border-teal-200">
+                    {g.reports.length} Signal{g.reports.length > 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  📍 {getLocalityName(g.primary.latitude, g.primary.longitude)}
+                </div>
+                <div className="text-[10px] font-bold text-rose-700">
+                  Priority Severity: {g.maxSeverity}/5
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -429,30 +432,26 @@ export const IssueMap: React.FC<IssueMapProps> = ({
       />
 
       {/* Legend Overlay */}
-      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm border border-slate-200/80 p-3 rounded-medium shadow-md text-[10px] space-y-2 select-none z-10 max-w-[150px] font-sans font-medium text-slate-700 pointer-events-auto">
-        <div className="font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-1 text-[9px]">
-          Vector Map Legend
+      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm border border-slate-200/90 p-3 rounded-xl shadow-md text-[10px] space-y-2 select-none z-10 max-w-[165px] font-sans font-medium text-slate-700 pointer-events-auto">
+        <div className="font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-1 text-[9px]">
+          Priority Intelligence
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-red-500" />
-            <span>Road Damage</span>
+            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-red-600" />
+            <span className="font-medium text-slate-800">Critical Priority (Sev 4-5)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-amber-500" />
-            <span>Street Light</span>
+            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-orange-600" />
+            <span className="font-medium text-slate-800">Elevated Need (Sev 3)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-orange-500" />
-            <span>Garbage Overflow</span>
+            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-amber-600" />
+            <span className="font-medium text-slate-800">Moderate Need (Sev 2)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-blue-500" />
-            <span>Water Leak</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-emerald-500" />
-            <span>Footpath Slabs</span>
+            <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0 bg-teal-600" />
+            <span className="font-medium text-slate-800">Standard Community Need</span>
           </div>
         </div>
       </div>
@@ -460,7 +459,7 @@ export const IssueMap: React.FC<IssueMapProps> = ({
       {/* Locate button */}
       <button
         onClick={handleGeolocate}
-        className="absolute bottom-6 right-4 bg-white hover:bg-slate-50 border border-slate-200 p-2.5 rounded-medium shadow-md text-slate-700 transition-all select-none z-10 cursor-pointer active:scale-95 pointer-events-auto"
+        className="absolute bottom-6 right-4 bg-white hover:bg-slate-50 border border-slate-200 p-2.5 rounded-xl shadow-md text-slate-700 transition-all select-none z-10 cursor-pointer active:scale-95 pointer-events-auto"
         title="Pan to My Current Location"
       >
         <Navigation size={15} className="rotate-45" />

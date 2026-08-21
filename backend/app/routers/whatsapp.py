@@ -190,8 +190,8 @@ def _humanize_issue_type(issue_type: str) -> str:
 
 def _msg_welcome() -> str:
     return (
-        "Namaste! Welcome to CivicPulse.\n\n"
-        "I can help you report a civic issue.\n\n"
+        "Namaste! Welcome to CommonGround — Community Demand Intelligence.\n\n"
+        "I can help you report a community infrastructure or civic demand.\n\n"
         "Please send a clear photo of the problem."
     )
 

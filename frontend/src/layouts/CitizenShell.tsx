@@ -14,13 +14,13 @@ export const CitizenShell: React.FC = () => {
   const location = useLocation();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
-    return localStorage.getItem('nivaran_sidebar_collapsed') === 'true';
+    return (localStorage.getItem('commonground_sidebar_collapsed') || localStorage.getItem('nivaran_sidebar_collapsed')) === 'true';
   });
 
   const toggleSidebar = () => {
     setSidebarCollapsed((prev) => {
       const next = !prev;
-      localStorage.setItem('nivaran_sidebar_collapsed', String(next));
+      localStorage.setItem('commonground_sidebar_collapsed', String(next));
       return next;
     });
   };
@@ -28,7 +28,8 @@ export const CitizenShell: React.FC = () => {
   const getActiveTab = (): string => {
     const path = location.pathname;
     if (path.startsWith('/report')) return 'report';
-    if (path.startsWith('/tracker') || path.startsWith('/my-reports') || path.startsWith('/discover')) return 'my-reports';
+    if (path.startsWith('/tracker')) return 'tracker';
+    if (path.startsWith('/discover') || path.startsWith('/my-reports')) return 'discover';
     if (path.startsWith('/government/queue')) return 'government';
     if (path.startsWith('/internal/document-review')) return 'document-review';
     if (path.startsWith('/internal/admin')) return 'admin';
@@ -40,12 +41,14 @@ export const CitizenShell: React.FC = () => {
   const handleNavigate = (tab: string) => {
     if (tab === 'home') navigate('/');
     else if (tab === 'report') navigate('/report');
-    else if (tab === 'my-reports') navigate('/discover');
+    else if (tab === 'tracker') navigate('/tracker');
+    else if (tab === 'discover' || tab === 'my-reports') navigate('/discover');
     else if (tab === 'government') navigate('/government/queue');
     else if (tab === 'document-review') navigate('/government/queue');
     else if (tab === 'admin') navigate('/internal/admin');
     else if (tab === 'evaluate') navigate('/internal/evaluate');
     else if (tab === 'community') navigate('/community');
+    else navigate('/');
   };
 
   const accountButton = (

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Layers, Eye, Sparkles } from 'lucide-react';
 import type { Issue } from '@/api/types';
-import { getImageUrl } from '@/utils/getImageUrl';
+import { getImageUrl, FALLBACK_PLACEHOLDER } from '@/utils/getImageUrl';
 import { getLocalityName } from '@/utils/getLocalityName';
 import { StatusBadge } from '../shared/StatusBadge';
 import {
@@ -47,7 +47,10 @@ export const IssueCardComponent: React.FC<IssueCardProps> = ({ issue, reportsCou
             loaded ? "opacity-100" : "opacity-0"
           )}
           onLoad={() => setLoaded(true)}
-          onError={() => setLoaded(true)}
+          onError={(e) => {
+            setLoaded(true);
+            (e.target as HTMLImageElement).src = FALLBACK_PLACEHOLDER;
+          }}
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none" />
@@ -76,27 +79,20 @@ export const IssueCardComponent: React.FC<IssueCardProps> = ({ issue, reportsCou
         </div>
       </div>
 
-      {/* Card Details Content */}
-      <div className="p-5 flex flex-col flex-1 justify-between gap-4">
-        <div className="space-y-2.5">
-          {/* Header Row: Type and status */}
-          <div className="flex items-start justify-between gap-3">
-            <h3 className="text-sm font-bold text-secondary-foreground font-sans leading-tight">
-              {humanizeIssueType(issue.issue_type, issue.description)}
+      {/* Content Container */}
+      <div className="p-4 flex-1 flex flex-col justify-between space-y-3 font-sans">
+        <div className="space-y-1.5">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-primary transition-colors flex-1">
+              {issue.description || `${humanizeIssueType(issue.issue_type, issue.description)} Demand`}
             </h3>
             <StatusBadge status={issue.status} className="shrink-0 scale-90 origin-right" />
           </div>
 
-          {/* Description Preview */}
-          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-sans font-normal">
-            {issue.description || 'No description provided.'}
-          </p>
-
-          {/* Metadata Row: GPS Location and Date */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-1 text-[11px] text-slate-400 font-sans">
-            <div className="flex items-center gap-1">
+          <div className="flex flex-col gap-1 text-xs text-slate-500 font-sans">
+            <div className="flex items-center gap-1.5">
               <MapPin size={13} className="shrink-0 text-slate-400" />
-              <span className="truncate max-w-[140px] font-medium text-slate-500">
+              <span className="truncate font-semibold text-slate-700">
                 {getLocalityName(issue.latitude, issue.longitude)}
               </span>
             </div>
@@ -136,7 +132,7 @@ export const IssueCardComponent: React.FC<IssueCardProps> = ({ issue, reportsCou
             to={`/issue/${issue.id}`}
             className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-primary-hover transition-colors font-sans"
           >
-            <span>View Case</span>
+            <span>View Demand</span>
             <Eye size={12} />
           </Link>
         </div>

@@ -1,8 +1,8 @@
-# Nivaran — Community Demand Intelligence
+# CommonGround — Community Demand Intelligence
 
 > **Built for India. Designed to adapt beyond India.**
 
-Nivaran is an AI-powered Digital Public Good for **Build with AI: Code for Communities (Second Edition) — Track 1: AI for Digital Public Infrastructure & Governance**.
+CommonGround is an AI-powered Community Demand Intelligence Digital Public Good built for **Build with AI: Code for Communities (Second Edition) — Track 1: AI for Digital Public Infrastructure & Governance**.
 
 It transforms fragmented citizen voice, photo, and text reports into verified **Demand Hotspots**, combining citizen demand with Indian census demographics and infrastructure indices to recommend high-priority public development projects for policymakers.
 

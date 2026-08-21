@@ -13,15 +13,15 @@ import { ArrowLeft, FileText, ShieldCheck } from 'lucide-react';
 export const IssueDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  usePageTitle(`Case #${id || ''} Detail & Timeline — CivicPulse`);
+  usePageTitle(`Demand Signal #${id || ''} Detail — CommonGround`);
   const { data, isLoading, isError, refetch } = useIssueDetail(id || '');
   const { data: publicConfig } = usePublicConfig();
 
   if (!id) {
     return (
       <ErrorState
-        title="No Case Specified"
-        description="Please select a valid case from the Discovery feed or Operations map."
+        title="No Demand Signal Specified"
+        description="Please select a valid demand signal from the overview feed or operations map."
         onRetry={() => navigate('/discover')}
       />
     );
@@ -30,7 +30,7 @@ export const IssueDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="py-12 flex justify-center">
-        <LoadingIndicator label={`Loading case record #${id}...`} size="lg" />
+        <LoadingIndicator label={`Loading demand record #${id}...`} size="lg" />
       </div>
     );
   }
@@ -38,8 +38,8 @@ export const IssueDetailPage: React.FC = () => {
   if (isError || !data?.issue) {
     return (
       <ErrorState
-        title="Case Not Found"
-        description={`Civic case #${id} could not be retrieved from the backend API.`}
+        title="Demand Signal Not Found"
+        description={`Demand signal #${id} could not be retrieved from CommonGround backend services.`}
         onRetry={() => refetch()}
       />
     );
@@ -70,7 +70,7 @@ export const IssueDetailPage: React.FC = () => {
         <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3" role="status">
           <p className="text-sm font-semibold text-sky-900">Evidence pipeline still processing</p>
           <p className="mt-1 text-sm text-sky-800">
-            CivicPulse is completing corroboration and will show the impact and action package when the available
+            CommonGround is completing corroboration and will show the impact and policy action package when the available
             evidence supports it. This page refreshes automatically while processing continues.
           </p>
         </div>

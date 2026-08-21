@@ -12,31 +12,43 @@ interface AuthModalProps {
 const DEMO_ACCOUNTS = [
   {
     role: 'citizen' as UserRole,
-    name: 'Aarav Patel (Citizen)',
-    email: 'citizen@nivaran.org',
-    dept: 'Public Resident',
-    desc: 'Public citizen reporting interface, tracker & My Reports',
+    name: 'Aarav Patel',
+    roleTitle: 'Citizen',
+    email: 'citizen@commonground.org',
+    dept: 'Community Resident',
+    desc: 'Voice & photo demand submission, tracker & community needs',
   },
   {
     role: 'officer' as UserRole,
-    name: 'Rajesh Kumar (Municipal Officer)',
-    email: 'officer@mcgm.gov.in',
-    dept: 'K-East Ward Municipal Office',
-    desc: 'Official Case Queue, SLA alerts & Resolution workflow',
+    name: 'Rajesh Kumar',
+    roleTitle: 'Planning Officer',
+    email: 'officer@commonground.org',
+    dept: 'Municipal Planning Directorate',
+    desc: 'Demand Hotspots, demographic fusion & infrastructure context',
+  },
+  {
+    role: 'department_admin' as UserRole,
+    name: 'Vikram Deshmukh',
+    roleTitle: 'District / State Planner',
+    email: 'planner@commonground.org',
+    dept: 'State Infrastructure Board',
+    desc: 'Cross-district demand prioritization and budget preparation',
   },
   {
     role: 'auditor' as UserRole,
-    name: 'Priya Sharma (Public Auditor)',
-    email: 'auditor@nivaran.org',
-    dept: 'Public Audit Bureau',
-    desc: 'Compliance review, audit trail & Evaluation framework',
+    name: 'Priya Sharma',
+    roleTitle: 'Policy Reviewer',
+    email: 'reviewer@commonground.org',
+    dept: 'Public Policy Bureau',
+    desc: 'Gemini policy reasoning audit & Evaluator walkthrough',
   },
   {
     role: 'admin' as UserRole,
     name: 'System Administrator',
-    email: 'admin@nivaran.org',
-    dept: 'IT & Governance',
-    desc: 'Full administrative controls & system observability',
+    roleTitle: 'System Administrator',
+    email: 'admin@commonground.org',
+    dept: 'IT & System Governance',
+    desc: 'Technical administration & system observability',
   },
 ];
 
@@ -54,7 +66,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     try {
       const res = await apiClient.post('/auth/login', {
         email: acc.email,
-        password: 'nivaran2026!',
+        password: 'commonground2026!',
       });
 
       const data = res.data;
@@ -73,7 +85,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       // Fallback local login if backend auth endpoint is unreachable
       login(`demo-token-${acc.role}`, {
         id: `USR-${acc.role.toUpperCase()}-DEMO`,
-        name: acc.name,
+        name: `${acc.name} (${acc.roleTitle})`,
         role: acc.role,
         department: acc.dept,
       });
@@ -85,18 +97,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm font-sans animate-fade-in">
-      <div className="bg-white border border-slate-200 rounded-medium shadow-modal w-full max-w-lg overflow-hidden flex flex-col">
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-modal w-full max-w-lg overflow-hidden flex flex-col">
         {/* Modal Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-teal-600" />
             <h3 className="font-bold text-base text-slate-800">
-              CivicPulse Identity & Access Management
+              CommonGround Stakeholder Access & Roles
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-full text-sm font-bold"
+            className="text-slate-400 hover:text-slate-600 p-1 rounded-full text-sm font-bold cursor-pointer"
           >
             ✕
           </button>

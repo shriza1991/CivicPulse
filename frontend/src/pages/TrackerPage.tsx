@@ -303,43 +303,43 @@ export const TrackerPage: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col pb-12 font-sans">
       {/* Landing Experience: 10-second value proposition header */}
-      <div ref={(el) => registerTourTarget('tracker-header', el)} className="bg-slate-900 text-white rounded-medium p-6 md:p-8 mt-6 shadow-premium relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-950/20 to-transparent pointer-events-none" />
+      <div ref={(el) => registerTourTarget('tracker-header', el)} className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 mt-4 shadow-premium relative overflow-hidden border border-slate-800">
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-950/30 to-transparent pointer-events-none" />
         <div className="relative z-10 max-w-3xl space-y-3.5">
-          <span className="text-[10px] font-bold text-teal-400 uppercase tracking-widest bg-teal-950/80 px-2 py-0.5 rounded-small border border-teal-800 select-none">
-            AI-Grounded Action Platform
+          <span className="text-[10px] font-bold text-teal-400 uppercase tracking-widest bg-teal-950/80 px-2.5 py-0.5 rounded-full border border-teal-800 select-none">
+            CommonGround Priority Intelligence
           </span>
           <h2 className="text-xl md:text-2xl font-bold font-sans tracking-tight leading-tight">
-            civicpulse Operations Center
+            India Demand & Infrastructure Priority Center
           </h2>
-          <p className="text-xs md:text-sm text-slate-355 font-normal leading-relaxed">
-            Every citizen report containing photographic evidence is processed through an automated verification pipeline. The system clusters duplicates, assesses neighborhood safety risk, and drafts reviewable, sendable legal briefs for official action.
+          <p className="text-xs md:text-sm text-slate-300 font-normal leading-relaxed">
+            Citizen voice, text, and photo demand signals are clustered into spatial hotspots and fused with Indian census demographics, service gap metrics, and investment records to compute deterministic priority scores and Gemini policy briefs.
           </p>
           <div className="flex flex-wrap items-center gap-y-2 gap-x-1.5 md:gap-x-2.5 py-1 text-[10px] font-bold text-slate-300 select-none border-t border-b border-slate-800/60">
-            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">1</span> Upload</span>
-            <span className="text-slate-650 text-[8px]">➔</span>
-            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">2</span> Stage-0 AI Filter</span>
-            <span className="text-slate-650 text-[8px]">➔</span>
-            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">3</span> Evidence Cluster</span>
-            <span className="text-slate-650 text-[8px]">➔</span>
-            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">4</span> Legal Grievance/RTI</span>
-            <span className="text-slate-650 text-[8px]">➔</span>
-            <span className="flex items-center gap-1 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-800 text-teal-300"><span className="text-teal-400">5</span> Dispatch (SendGrid)</span>
+            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">1</span> Citizen Signal</span>
+            <span className="text-slate-500 text-[8px]">➔</span>
+            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">2</span> Sarvam STT / Vision</span>
+            <span className="text-slate-500 text-[8px]">➔</span>
+            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">3</span> Spatial Hotspot</span>
+            <span className="text-slate-500 text-[8px]">➔</span>
+            <span className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"><span className="text-teal-400">4</span> Deterministic Priority (0-100)</span>
+            <span className="text-slate-500 text-[8px]">➔</span>
+            <span className="flex items-center gap-1 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-800 text-teal-300"><span className="text-teal-400">5</span> Gemini Policy Brief</span>
           </div>
           <div className="pt-1.5 flex flex-wrap gap-3">
             <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-small transition-all shadow-sm active:scale-[0.98]"
+              to="/report"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-lg transition-all shadow-sm active:scale-[0.98]"
             >
               <Plus size={14} />
-              <span>Submit Report Evidence</span>
+              <span>Submit Community Need</span>
             </Link>
             <a
               href="#active-cases"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-700 hover:border-slate-500 hover:bg-slate-800 text-slate-350 text-xs font-semibold rounded-small transition-all"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-slate-700 hover:border-slate-500 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-lg transition-all"
             >
               <Map size={14} />
-              <span>Audit Active Cases</span>
+              <span>Explore Demand Hotspots</span>
             </a>
           </div>
         </div>

@@ -44,7 +44,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
         <div className="truncate">
           <span className="font-semibold mr-2">
             {isReconnecting
-              ? 'Reconnecting to civicpulse network...'
+              ? 'Reconnecting to CommonGround network...'
               : isFailed
               ? 'Sync failed.'
               : 'You are working offline.'}

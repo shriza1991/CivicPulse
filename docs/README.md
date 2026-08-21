@@ -1,6 +1,6 @@
-# Documentation Directory — Nivaran
+# Documentation Directory — CommonGround
 
-This directory contains the documentation structure for **Nivaran — Community Demand Intelligence** (*Built for India. Designed to adapt beyond India.*).
+This directory contains the documentation structure for **CommonGround — Community Demand Intelligence** (*Built for India. Designed to adapt beyond India.*).
 
 ## Canonical Documentation Hierarchy
 

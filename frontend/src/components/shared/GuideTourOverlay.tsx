@@ -57,7 +57,7 @@ export const TourWelcomeBanner: React.FC = () => {
             🚀 Quick Evaluation
           </span>
           <span className="text-xs text-slate-650 font-medium truncate font-sans">
-            Complete this 5-minute evaluation to explore nivaran.
+            Complete this 5-minute evaluation to explore CommonGround.
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end">
@@ -86,7 +86,7 @@ export const TourWelcomeBanner: React.FC = () => {
       {viewStepsOpen && (
         <div className="mt-2.5 pt-2.5 border-t border-slate-200/60 flex flex-col gap-2.5">
           <div className="text-[10px] font-bold text-slate-450 uppercase tracking-widest pl-1">
-            civicpulse Evaluation Guide
+            CommonGround Evaluation Guide
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 animate-fade">
             {tourPhases.map(phase => (

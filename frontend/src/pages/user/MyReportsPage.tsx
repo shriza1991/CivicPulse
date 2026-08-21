@@ -3,7 +3,7 @@ import { usePageTitle } from '../../core/hooks/usePageTitle';
 import { ReportsDashboard } from '../../features/account/components/ReportsDashboard';
 
 export const MyReportsPage: React.FC = () => {
-  usePageTitle('My Reports & Drafts — civicpulse');
+  usePageTitle('My Demands & Drafts — CommonGround');
 
   return <ReportsDashboard />;
 };

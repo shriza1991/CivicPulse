@@ -49,12 +49,12 @@ export const WhatsAppReportBanner: React.FC<WhatsAppReportBannerProps> = ({ clas
     return sessionStorage.getItem('wa_banner_dismissed') === '1';
   });
 
-  const configWaNumber = configData?.whatsapp_number || import.meta.env.VITE_WHATSAPP_NUMBER || '';
+  const configWaNumber = configData?.whatsapp_number || import.meta.env.VITE_WHATSAPP_NUMBER || '+919876543210';
   const waEnabled = configData?.whatsapp_enabled !== undefined ? configData.whatsapp_enabled : true;
 
-  const waNumberClean = configWaNumber.replace(/\D/g, '');
+  const waNumberClean = configWaNumber.replace(/\D/g, '') || '919876543210';
   const waGreeting = encodeURIComponent('Hi');
-  const waDeepLink = (waEnabled && waNumberClean) ? `https://wa.me/${waNumberClean}?text=${waGreeting}` : null;
+  const waDeepLink = waEnabled ? `https://wa.me/${waNumberClean}?text=${waGreeting}` : null;
   const qrUrl = waDeepLink
     ? `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(waDeepLink)}&choe=UTF-8`
     : null;

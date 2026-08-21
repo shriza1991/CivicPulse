@@ -28,12 +28,12 @@ const DEFAULT_FLAGS: Record<string, boolean> = {
   enableMapMarkerClustering: true,
   enableOfflineQueueSync: false,
   enableGovernmentSLAAlerts: true,
-  enableInternalEvaluation: false,
+  enableInternalEvaluation: true,
 };
 
 const featureFlags = {
   ...DEFAULT_FLAGS,
-  enableInternalEvaluation: import.meta.env.VITE_ENABLE_EVALUATION === 'true',
+  enableInternalEvaluation: import.meta.env.VITE_ENABLE_EVALUATION !== 'false',
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -107,14 +107,14 @@ def test_whatsapp_disabled_returns_503(monkeypatch):
 def test_greeting_sends_welcome_message(client):
     status_code, twiml = post_webhook(client, body="Hi")
     assert status_code == 200
-    assert "Namaste! Welcome to CivicPulse." in twiml
+    assert "Namaste! Welcome to CommonGround" in twiml
     assert "photo" in twiml.lower()
 
 
 def test_hello_also_triggers_welcome(client):
     status_code, twiml = post_webhook(client, body="hello")
     assert status_code == 200
-    assert "Namaste! Welcome to CivicPulse." in twiml
+    assert "Namaste! Welcome to CommonGround" in twiml
 
 
 @patch("app.routers.whatsapp._download_media", new_callable=AsyncMock)

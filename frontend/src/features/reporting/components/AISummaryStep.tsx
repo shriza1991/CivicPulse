@@ -18,7 +18,7 @@ export const AISummaryStep: React.FC<AISummaryStepProps> = ({ issueType, userNot
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
         <p className="text-sm font-semibold text-neutral-900">Analysis runs after submission</p>
         <p className="mt-1 text-sm leading-relaxed text-neutral-700">
-          CivicPulse will review the uploaded evidence on the server after you submit. The returned issue type,
+          CommonGround will review the uploaded evidence on the server after you submit. The returned demand type,
           confidence, severity, and explanation will appear on the case timeline; no result is shown here before
           the evidence has been processed.
         </p>

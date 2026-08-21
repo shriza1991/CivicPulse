@@ -192,13 +192,73 @@ def seed_data(session: Session):
         },
         {
             "id": "c-tree-powai",
-            "area_label": "Powai Vihar Road, Powai",
+            "area_label": "Powai Vihar Road, Powai, Maharashtra",
             "lat": 19.1206,
             "lng": 72.9056,
             "count": 2,
             "status": "escalated",
             "first_reported": "2026-06-19T18:00:00Z",
             "last_reported": "2026-06-24T12:30:00Z"
+        },
+        {
+            "id": "c-water-bengaluru",
+            "area_label": "Bellandur ORR Transit Corridor, Bengaluru, Karnataka",
+            "lat": 12.9304,
+            "lng": 77.6784,
+            "count": 4,
+            "status": "escalated",
+            "first_reported": "2026-06-15T08:00:00Z",
+            "last_reported": "2026-06-28T14:00:00Z"
+        },
+        {
+            "id": "c-drain-patna",
+            "area_label": "Kankarbagh Stormwater Culvert, Patna, Bihar",
+            "lat": 25.5941,
+            "lng": 85.1376,
+            "count": 3,
+            "status": "approved",
+            "first_reported": "2026-06-12T10:00:00Z",
+            "last_reported": "2026-06-27T16:00:00Z"
+        },
+        {
+            "id": "c-light-lucknow",
+            "area_label": "Gomti Nagar Extension, Lucknow, Uttar Pradesh",
+            "lat": 26.8467,
+            "lng": 80.9462,
+            "count": 2,
+            "status": "pending_review",
+            "first_reported": "2026-06-18T19:00:00Z",
+            "last_reported": "2026-06-28T21:00:00Z"
+        },
+        {
+            "id": "c-waste-kolkata",
+            "area_label": "Salt Lake Sector V Perimeter, Kolkata, West Bengal",
+            "lat": 22.5804,
+            "lng": 88.4378,
+            "count": 3,
+            "status": "drafted",
+            "first_reported": "2026-06-14T11:00:00Z",
+            "last_reported": "2026-06-26T17:30:00Z"
+        },
+        {
+            "id": "c-flood-guwahati",
+            "area_label": "Bharalu River Catchment, Guwahati, Assam",
+            "lat": 26.1820,
+            "lng": 91.7500,
+            "count": 4,
+            "status": "escalated",
+            "first_reported": "2026-06-10T09:00:00Z",
+            "last_reported": "2026-06-28T12:00:00Z"
+        },
+        {
+            "id": "c-footpath-chennai",
+            "area_label": "Anna Nagar 2nd Avenue, Chennai, Tamil Nadu",
+            "lat": 13.0850,
+            "lng": 80.2100,
+            "count": 2,
+            "status": "approved",
+            "first_reported": "2026-06-16T08:30:00Z",
+            "last_reported": "2026-06-27T15:00:00Z"
         },
     ]
 
@@ -374,6 +434,60 @@ def seed_data(session: Session):
             "status": "classified", "severity": 5, "time": "2026-06-08T11:00:00Z", "score": 0.82,
             "desc": "Sunken manhole frame on Ghatkopar arterial road, creating a sharp 15cm metal lip hazard for passing tires.",
             "note": "Very dangerous for two-wheelers."
+        },
+        {
+            "id": "iss-027", "type": "water", "photo": "/static/uploads/demo_leak1.jpg", "lat": 12.9304, "lng": 77.6784, "cluster_id": "c-water-bengaluru",
+            "status": "escalated", "severity": 5, "time": "2026-06-28T14:00:00Z", "score": 0.94,
+            "desc": "Major drinking water distribution line rupture along Outer Ring Road corridor in Bellandur, Bengaluru. Clean water flooding service road.",
+            "note": "Huge water supply burst disrupting tech park traffic."
+        },
+        {
+            "id": "iss-028", "type": "water", "photo": "/static/uploads/demo_leak2.jpg", "lat": 12.9308, "lng": 77.6789, "cluster_id": "c-water-bengaluru",
+            "status": "escalated", "severity": 4, "time": "2026-06-28T15:30:00Z", "score": 0.91,
+            "desc": "Secondary sub-surface water leakage undermining asphalt on Bellandur service road, Bengaluru.",
+            "note": "Road is caving in due to water leak underneath."
+        },
+        {
+            "id": "iss-029", "type": "water", "photo": "/static/uploads/demo_drain1.jpg", "lat": 25.5941, "lng": 85.1376, "cluster_id": "c-drain-patna",
+            "status": "approved", "severity": 4, "time": "2026-06-27T16:00:00Z", "score": 0.88,
+            "desc": "Severely choked municipal stormwater culvert in Kankarbagh, Patna, causing standing rainwater and breeding disease vectors.",
+            "note": "Monsoon water has nowhere to go in Kankarbagh."
+        },
+        {
+            "id": "iss-030", "type": "water", "photo": "/static/uploads/demo_drain2.jpg", "lat": 25.5945, "lng": 85.1380, "cluster_id": "c-drain-patna",
+            "status": "approved", "severity": 4, "time": "2026-06-27T17:00:00Z", "score": 0.86,
+            "desc": "Solid silt accumulation blocking drainage outlet near Patna central hospital perimeter.",
+            "note": "Hospital access road is getting flooded."
+        },
+        {
+            "id": "iss-031", "type": "street_lighting", "photo": "/static/uploads/demo_streetlight1.jpg", "lat": 26.8467, "lng": 80.9462, "cluster_id": "c-light-lucknow",
+            "status": "pending_review", "severity": 3, "time": "2026-06-28T21:00:00Z", "score": 0.85,
+            "desc": "Non-functional street illumination across 800m stretch in Gomti Nagar Extension, Lucknow. Area completely dark after 8 PM.",
+            "note": "Dark road poses serious safety risks for women commuters."
+        },
+        {
+            "id": "iss-032", "type": "garbage", "photo": "/static/uploads/demo_garbage1.jpg", "lat": 22.5804, "lng": 88.4378, "cluster_id": "c-waste-kolkata",
+            "status": "drafted", "severity": 4, "time": "2026-06-26T17:30:00Z", "score": 0.87,
+            "desc": "Overburdened ward solid waste compactor station in Salt Lake Sector V, Kolkata, spilling garbage across the pedestrian footpath.",
+            "note": "Commercial waste accumulating without timely clearance."
+        },
+        {
+            "id": "iss-033", "type": "water", "photo": "/static/uploads/demo_drain1.jpg", "lat": 26.1820, "lng": 91.7500, "cluster_id": "c-flood-guwahati",
+            "status": "escalated", "severity": 5, "time": "2026-06-28T12:00:00Z", "score": 0.95,
+            "desc": "Severe river embankment erosion along Bharalu river catchment in Guwahati, threatening structural stability of riverside houses.",
+            "note": "Urgent embankment reinforcement needed before peak monsoon."
+        },
+        {
+            "id": "iss-034", "type": "water", "photo": "/static/uploads/demo_drain2.jpg", "lat": 26.1825, "lng": 91.7505, "cluster_id": "c-flood-guwahati",
+            "status": "escalated", "severity": 5, "time": "2026-06-28T13:15:00Z", "score": 0.92,
+            "desc": "Debris and silt blockage in Bharalu flood channel causing backflow into low-lying Guwahati settlements.",
+            "note": "Flash flood risk for over 3,000 households."
+        },
+        {
+            "id": "iss-035", "type": "footpath", "photo": "/static/uploads/demo_sidewalk.jpg", "lat": 13.0850, "lng": 80.2100, "cluster_id": "c-footpath-chennai",
+            "status": "approved", "severity": 3, "time": "2026-06-27T15:00:00Z", "score": 0.83,
+            "desc": "Broken concrete pavers and open drain slabs along Anna Nagar 2nd Avenue, Chennai, forcing pedestrians into traffic.",
+            "note": "School children having to walk on the busy road."
         }
     ]
 

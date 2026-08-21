@@ -13,7 +13,7 @@ const HeaderBar: React.FC = () => {
   return (
     <header className="h-14 border-b border-secondary-border bg-white flex items-center justify-between px-6 shrink-0 z-20 select-none">
       <div className="flex items-center gap-2">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest md:hidden">civicpulse</span>
+        <span className="text-xs font-bold text-teal-600 uppercase tracking-widest md:hidden">CommonGround</span>
       </div>
       <button
         onClick={restartTour}

@@ -11,7 +11,7 @@ import { LoadingIndicator } from '../../design-system/primitives/feedback/Loadin
 import { ErrorState } from '../../design-system/primitives/feedback/ErrorState';
 
 export const DiscoveryPage: React.FC = () => {
-  usePageTitle('Discover Public Cases & Hazards — civicpulse');
+  usePageTitle('India Demand Overview — CommonGround');
   const navigate = useNavigate();
   const { filters, updateFilter, resetFilters } = useDiscoveryFilterState();
   const { data, isLoading, isError, refetch } = useIssues();
@@ -19,7 +19,7 @@ export const DiscoveryPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="py-12 flex justify-center">
-        <LoadingIndicator label="Loading public case discovery index..." size="lg" />
+        <LoadingIndicator label="Loading India-wide community demand index..." size="lg" />
       </div>
     );
   }
@@ -27,8 +27,8 @@ export const DiscoveryPage: React.FC = () => {
   if (isError) {
     return (
       <ErrorState
-        title="Failed to load discovery feed"
-        description="Could not connect to civicpulse backend services."
+        title="Failed to load demand index"
+        description="Could not connect to CommonGround backend services."
         onRetry={() => refetch()}
       />
     );
@@ -38,6 +38,13 @@ export const DiscoveryPage: React.FC = () => {
 
   // Filter issues according to active search bar & chips state
   const filteredIssues = allIssues.filter((issue) => {
+    // 0. Primary India Overview filter (exclude foreign adapter test records unless explicitly searched)
+    if (!filters.searchQuery.trim()) {
+      if (issue.id.startsWith('iss-zaf-') || issue.id.startsWith('iss-bra-') || (issue as any).country_code && (issue as any).country_code !== 'IND') {
+        return false;
+      }
+    }
+
     // 1. Text Search Filter
     if (filters.searchQuery.trim()) {
       const q = filters.searchQuery.toLowerCase();
@@ -70,9 +77,9 @@ export const DiscoveryPage: React.FC = () => {
     <div className="space-y-6 font-sans py-2">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-neutral-200 pb-3">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Discover Public Cases & Hazards</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">India Community Demand Overview</h1>
           <p className="text-xs text-neutral-700 mt-0.5">
-            Search, filter, and audit verified civic issues across your municipal jurisdiction.
+            Search, filter, and audit verified citizen demand signals across Indian states and districts.
           </p>
         </div>
 

@@ -26,7 +26,7 @@ export const DiscoverFeed: React.FC = () => {
     return (
       <ErrorState
         title="Failed to load public reports"
-        description="Could not connect to civicpulse backend services. Local draft work remains safe."
+        description="Could not connect to CommonGround backend services. Local draft work remains safe."
         onRetry={() => refetch()}
       />
     );

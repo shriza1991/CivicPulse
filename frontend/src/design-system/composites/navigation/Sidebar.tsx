@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, FileText, PlusCircle, ChevronLeft, ChevronRight, ShieldAlert, CheckSquare, BarChart3, Users, Settings } from 'lucide-react';
+import { Home, FileText, PlusCircle, ChevronLeft, ChevronRight, ShieldAlert, BarChart3, Users, Settings } from 'lucide-react';
 import { Logo } from '../../primitives/foundation/Logo';
 import { useAuth } from '../../../core/providers/AuthProvider';
 import { cn } from '../../../lib/utils';
@@ -21,37 +21,52 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { role, user } = useAuth();
 
+  const getRoleDisplayName = (r: string) => {
+    switch (r) {
+      case 'officer': return 'Planning Officer';
+      case 'department_admin': return 'District / State Planner';
+      case 'auditor': return 'Policy Reviewer';
+      case 'institution': return 'Community Facilitator';
+      case 'admin': return 'System Administrator';
+      case 'citizen': return 'Citizen';
+      default: return 'Citizen';
+    }
+  };
+
   const getNavItems = () => {
     switch (role) {
       case 'officer':
       case 'department_admin':
         return [
-          { id: 'government', label: 'Executive Queue', icon: <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600" /> },
-          { id: 'document-review', label: 'Document Review', icon: <CheckSquare className="w-5 h-5 shrink-0 text-teal-600" /> },
-          { id: 'my-reports', label: 'Map & Reports', icon: <FileText className="w-5 h-5 shrink-0" /> },
-          { id: 'report', label: 'Report Hazard', icon: <PlusCircle className="w-5 h-5 shrink-0" /> },
+          { id: 'government', label: 'Demand Hotspots', icon: <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600" /> },
+          { id: 'tracker', label: 'Priority Intelligence', icon: <FileText className="w-5 h-5 shrink-0 text-teal-600" /> },
+          { id: 'home', label: 'Community Demand', icon: <Home className="w-5 h-5 shrink-0" /> },
+          { id: 'discover', label: 'India Overview', icon: <Users className="w-5 h-5 shrink-0" /> },
+          { id: 'report', label: 'Intake Need', icon: <PlusCircle className="w-5 h-5 shrink-0" /> },
         ];
       case 'auditor':
         return [
-          { id: 'evaluate', label: 'Evaluation Mode', icon: <BarChart3 className="w-5 h-5 shrink-0 text-indigo-600" /> },
-          { id: 'government', label: 'Executive Queue', icon: <ShieldAlert className="w-5 h-5 shrink-0" /> },
-          { id: 'my-reports', label: 'Audit Map Index', icon: <FileText className="w-5 h-5 shrink-0" /> },
-          { id: 'community', label: 'Community Hub', icon: <Users className="w-5 h-5 shrink-0" /> },
+          { id: 'government', label: 'Demand Hotspots', icon: <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600" /> },
+          { id: 'evaluate', label: 'Policy & Evaluation Review', icon: <BarChart3 className="w-5 h-5 shrink-0 text-indigo-600" /> },
+          { id: 'tracker', label: 'Priority Intelligence', icon: <FileText className="w-5 h-5 shrink-0 text-teal-600" /> },
+          { id: 'discover', label: 'India Overview', icon: <Users className="w-5 h-5 shrink-0" /> },
+          { id: 'home', label: 'Community Demand', icon: <Home className="w-5 h-5 shrink-0" /> },
         ];
       case 'admin':
         return [
-          { id: 'admin', label: 'Admin Console', icon: <Settings className="w-5 h-5 shrink-0 text-purple-600" /> },
-          { id: 'government', label: 'Executive Queue', icon: <ShieldAlert className="w-5 h-5 shrink-0" /> },
-          { id: 'evaluate', label: 'Evaluation Mode', icon: <BarChart3 className="w-5 h-5 shrink-0" /> },
-          { id: 'my-reports', label: 'Map & Reports', icon: <FileText className="w-5 h-5 shrink-0" /> },
-          { id: 'report', label: 'Report Hazard', icon: <PlusCircle className="w-5 h-5 shrink-0" /> },
+          { id: 'government', label: 'Demand Hotspots', icon: <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600" /> },
+          { id: 'tracker', label: 'Priority Intelligence', icon: <FileText className="w-5 h-5 shrink-0 text-teal-600" /> },
+          { id: 'evaluate', label: 'Policy & Evaluation Review', icon: <BarChart3 className="w-5 h-5 shrink-0 text-indigo-600" /> },
+          { id: 'discover', label: 'India Overview', icon: <Users className="w-5 h-5 shrink-0" /> },
+          { id: 'home', label: 'Community Demand', icon: <Home className="w-5 h-5 shrink-0" /> },
+          { id: 'admin', label: 'System Admin', icon: <Settings className="w-5 h-5 shrink-0 text-purple-600" /> },
         ];
       default:
         return [
-          { id: 'home', label: 'Home Feed', icon: <Home className="w-5 h-5 shrink-0" /> },
-          { id: 'report', label: 'Report Issue', icon: <PlusCircle className="w-5 h-5 shrink-0 text-primary-600" /> },
-          { id: 'my-reports', label: 'Map & Reports', icon: <FileText className="w-5 h-5 shrink-0" /> },
-          { id: 'community', label: 'Community Hub', icon: <Users className="w-5 h-5 shrink-0" /> },
+          { id: 'home', label: 'Community Demand', icon: <Home className="w-5 h-5 shrink-0 text-teal-600" /> },
+          { id: 'report', label: 'Submit Need', icon: <PlusCircle className="w-5 h-5 shrink-0 text-primary-600" /> },
+          { id: 'tracker', label: 'Priority Intelligence', icon: <FileText className="w-5 h-5 shrink-0" /> },
+          { id: 'discover', label: 'India Overview', icon: <Users className="w-5 h-5 shrink-0" /> },
         ];
     }
   };
@@ -109,10 +124,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {!collapsed && user && (
         <div className="pt-3 mt-auto border-t border-slate-100 text-xs">
           <div className="bg-slate-50 border border-slate-200/80 rounded-medium p-2.5 space-y-1">
-            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold block">Active Role Mode</span>
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold block">Active Stakeholder</span>
             <span className="font-bold text-slate-800 text-xs block truncate">{user.name}</span>
             <span className="inline-block bg-teal-100 text-teal-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">
-              {role}
+              {getRoleDisplayName(role)}
             </span>
           </div>
         </div>

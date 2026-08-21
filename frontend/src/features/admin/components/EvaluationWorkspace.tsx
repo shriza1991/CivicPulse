@@ -7,72 +7,72 @@ import { useNavigate } from 'react-router-dom';
 const FULL_E2E_SIMULATION_STEPS = [
   {
     id: 'step-1',
-    role: 'Citizen',
-    title: '1. Citizen Photo Evidence Capture & Intake',
-    description: 'Citizen uploads clear photo evidence of severe footpath breakdown on NC Kelkar Rd, Dadar.',
+    role: 'Citizen / Community',
+    title: '1. Multilingual Voice & Evidence Demand Intake',
+    description: 'Citizen speaks in Marathi/Hindi or uploads photo demand for drainage & stormwater upgrades in Kurla/Dharavi corridor.',
     icon: Bot,
-    statusBadge: 'INTAKE COMPLETE',
-    details: 'Image uploaded (1.2 MB). EXIF GPS coordinates locked at 19.018° N, 72.830° E. Local IndexedDB draft initialized.',
-    actionLabel: 'Trigger AI Perception & Triage',
+    statusBadge: 'VOICE CAPTURED & TRANSCRIBED',
+    details: 'Sarvam AI Speech-to-Text transcribed spoken audio. EXIF GPS coordinates locked at 19.068° N, 72.877° E. Structured demand record initialized.',
+    actionLabel: 'Trigger Gemini Demand Perception',
   },
   {
     id: 'step-2',
-    role: 'AI Neural Triage',
-    title: '2. AI Vision Analysis & Severity Scoring',
-    description: 'Gemini 1.5 Flash Vision model processes image tensor and classifies structural footpath hazard.',
+    role: 'Google Gemini 2.5',
+    title: '2. Multimodal Demand Understanding & Category Extraction',
+    description: 'Gemini 2.5 processes spoken transcript and photo evidence, structuring need into category, urgency, and affected community scope.',
     icon: ShieldCheck,
-    statusBadge: 'AI SCORE: 94% CONFIDENCE',
-    details: 'Visual neural model detected broken concrete slabs. Risk Score: 4/5 (High Severity). SLA set to 24-Hour Dispatch Target.',
-    actionLabel: 'Run Spatial Duplicate Check',
+    statusBadge: 'AI PERCEPTION: 96% CONFIDENCE',
+    details: 'Extracted: Category=Drainage/Stormwater, Subcategory=Monsoon Waterlogging, Estimated Beneficiaries=4,500 residents. Evidence Trust Score=0.92.',
+    actionLabel: 'Correlate with Spatial Demand Hotspot',
   },
   {
     id: 'step-3',
-    role: 'Deduplication Engine',
-    title: '3. Spatial Deduplication & Cluster Grouping',
-    description: 'Deduplication engine evaluates 200m spatial radius against active ward reports.',
+    role: 'Spatial Intelligence',
+    title: '3. Semantic & Spatial Correlation → Demand Hotspot',
+    description: 'Correlation engine links 6 nearby citizen demand signals within 300m into a unified Community Demand Hotspot.',
     icon: Landmark,
-    statusBadge: 'CLUSTER MATCH FOUND',
-    details: 'Grouped with 3 existing citizen reports in Dadar Ward. Upvoted priority weight to High Risk Executive Priority.',
-    actionLabel: 'Forward to Executive Queue',
+    statusBadge: 'HOTSPOT FORMED (#HOT-MUM-01)',
+    details: 'Grouped 6 distinct citizen demands across Kurla West ward. Combined urgency elevated to High Community Priority.',
+    actionLabel: 'Fuse Indian Demographic & Infra Data',
   },
   {
     id: 'step-4',
-    role: 'Executive Queue',
-    title: '4. Executive Officer Review & SLA Clock Initialization',
-    description: 'Departmental triage officer inspects case #iss-005 in Executive Work Queue.',
+    role: 'Data Fusion Engine',
+    title: '4. Indian Demographic, Infrastructure & Investment Fusion',
+    description: 'Fuses census demographics (pop density: 38,500/km²), municipal infrastructure gap metrics, and current fiscal budget allocations.',
     icon: Landmark,
-    statusBadge: 'DEPARTMENT ASSIGNED',
-    details: 'Assigned to Public Works Directorate (PWD). Automated legal complaint directive & RTI brief generated.',
-    actionLabel: 'Dispatch Auditor Sign-off',
+    statusBadge: 'DATA FUSION COMPLETE',
+    details: 'Demographic vulnerability multiplier: 1.4x. Existing drain capacity deficit: 65%. Ward budget utilization: ₹4.2 Cr remaining.',
+    actionLabel: 'Calculate Deterministic Priority Score',
   },
   {
     id: 'step-5',
-    role: 'Public Auditor',
-    title: '5. Auditor Sign-off & Contractor Dispatch',
-    description: 'Public Auditor verifies legal complaint directive and triggers WhatsApp contractor dispatch.',
+    role: 'Deterministic Engine',
+    title: '5. Deterministic Priority Score Calculation (0–100)',
+    description: 'Computes objective, auditable priority score using mathematical weights (Severity 35%, Volume 25%, Demographics 20%, Investment Gap 20%).',
     icon: ShieldCheck,
-    statusBadge: 'DIRECTIVE APPROVED',
-    details: 'WhatsApp work order dispatched to PWD On-Call Repair Contractor. SLA Countdown: 18h remaining.',
-    actionLabel: 'Simulate Contractor Resolution',
+    statusBadge: 'DETERMINISTIC SCORE: 88.4 / 100',
+    details: 'Mathematical audit trail: Severity(29.5) + SignalVolume(22.0) + VulnerablePop(18.4) + InfraGap(18.5) = 88.4 (Tier 1 Critical Priority).',
+    actionLabel: 'Generate Gemini Policy Brief',
   },
   {
     id: 'step-6',
-    role: 'Department & Contractor',
-    title: '6. On-Site Physical Repair & After-Photo Upload',
-    description: 'Contractor completes repair, uploads geotagged after-photo, and submits completion certificate.',
+    role: 'Gemini Policy Advisor',
+    title: '6. Grounded Gemini 2.5 Policy & Budget Recommendation',
+    description: 'Gemini generates evidence-grounded policy intervention brief with estimated CAPEX, ward scheme mapping, and execution timelines.',
     icon: CheckCircle,
-    statusBadge: 'WORK COMPLETED',
-    details: 'Physical verification photo uploaded with matching cryptographic GPS stamp (NC Kelkar Rd).',
-    actionLabel: 'Send Citizen Resolution Notification',
+    statusBadge: 'POLICY BRIEF GENERATED',
+    details: 'Intervention: Box-drain culvert widening (450m). Scheme: AMRUT 2.0 / Municipal Stormwater Capex. Estimated Cost: ₹1.85 Cr. ROI: 4,500 residents protected.',
+    actionLabel: 'Submit for Human Planner Authority',
   },
   {
     id: 'step-7',
-    role: 'Citizen Notification',
-    title: '7. Consensus Audit Voting & Citizen Resolution Alert',
-    description: 'Automated notification dispatched to original reporter and nearby ward citizens for verification vote.',
+    role: 'Planning Officer',
+    title: '7. Human Planner Review & Infrastructure Sanction',
+    description: 'Public Planning Officer inspects hotspot intelligence, verifies mathematical scores, and signs off on budget sanction.',
     icon: Bell,
-    statusBadge: 'CASE CLOSED & VERIFIED',
-    details: '14 nearby citizens submitted physical verification votes (93% consensus). Immutable audit log stored on ledger.',
+    statusBadge: 'SANCTION APPROVED BY PLANNER',
+    details: 'Human-in-the-loop sign-off complete. Project approved for FY26 Q2 capital works tender. Immutable audit trail registered.',
     actionLabel: 'Restart Simulation',
   },
 ];
@@ -105,8 +105,8 @@ export const EvaluationWorkspace: React.FC = () => {
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-neutral-900">Hackathon Judge Evaluation Mode — Full E2E Journey</h2>
-              <p className="text-xs text-neutral-700">Automated end-to-end simulation across all 7 stages of CivicPulse governance architecture</p>
+              <h2 className="text-xl font-bold text-neutral-900">CommonGround Judge & Evaluator Workspace</h2>
+              <p className="text-xs text-neutral-700">Interactive walkthrough of the 7-stage Community Demand to Policy Intelligence pipeline</p>
             </div>
           </div>
 
@@ -188,16 +188,16 @@ export const EvaluationWorkspace: React.FC = () => {
           </span>
           <div className="flex flex-wrap gap-2">
             <Button variant="secondary" size="sm" onClick={() => navigate('/report')}>
-              Citizen Wizard
+              Voice & Demand Intake
             </Button>
             <Button variant="secondary" size="sm" onClick={() => navigate('/government/queue')}>
-              Executive Queue
-            </Button>
-            <Button variant="secondary" size="sm" onClick={() => navigate('/internal/document-review/iss-005')}>
-              Officer & Auditor Workspace
+              Demand Hotspots & Advisor
             </Button>
             <Button variant="secondary" size="sm" onClick={() => navigate('/tracker')}>
-              Public GIS Map Tracker
+              Priority Intelligence Map
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => navigate('/discover')}>
+              India Demand Overview
             </Button>
           </div>
         </div>

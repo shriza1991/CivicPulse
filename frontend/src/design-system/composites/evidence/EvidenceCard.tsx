@@ -2,6 +2,7 @@ import React from 'react';
 import { Camera, FileText, Mic, MapPin, Eye, Lock } from 'lucide-react';
 import { Surface } from '../../primitives/foundation/Surface';
 import { cn } from '../../../lib/utils';
+import { getImageUrl, FALLBACK_PLACEHOLDER } from '../../../utils/getImageUrl';
 
 export type EvidenceType = 'photo' | 'voice' | 'document';
 
@@ -58,8 +59,16 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
       </div>
 
       {mediaUrl && !restricted && (
-        <div className="relative rounded-md overflow-hidden aspect-video bg-neutral-900 flex items-center justify-center">
-          <img src={mediaUrl} alt={`Evidence media for ${title}`} className="object-cover w-full h-full" />
+        <div className="relative rounded-md overflow-hidden aspect-video bg-neutral-100 flex items-center justify-center border border-neutral-200">
+          <img
+            src={getImageUrl(mediaUrl)}
+            alt={`Evidence media for ${title}`}
+            className="object-cover w-full h-full"
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = FALLBACK_PLACEHOLDER;
+            }}
+          />
           {onInspect && (
             <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
               <Eye className="w-4 h-4" /> Inspect Evidence

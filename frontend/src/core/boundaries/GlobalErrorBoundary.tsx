@@ -22,7 +22,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[civicpulse ErrorBoundary] Caught unhandled runtime exception:', error, errorInfo);
+    console.error('[CommonGround ErrorBoundary] Caught unhandled runtime exception:', error, errorInfo);
   }
 
   public handleReset = () => {

@@ -40,16 +40,12 @@ export const Logo: React.FC<LogoProps> = ({
     ? 'currentColor'
     : '#18181B'; // Neutral 900
 
-  const badgeColor = isReversed
-    ? 'rgba(255,255,255,0.2)'
-    : '#1E3A8A'; // Indigo Government
-
   const logoSvg = (
     <div
       className={cn('inline-flex items-center gap-2 select-none', sizeHeights[size], className)}
       {...props}
     >
-      {/* Nivaran Emblem SVG */}
+      {/* CommonGround Emblem SVG */}
       <svg
         viewBox="0 0 36 36"
         fill="none"
@@ -75,11 +71,10 @@ export const Logo: React.FC<LogoProps> = ({
             className="font-sans font-bold tracking-tight text-[1.1em]"
             style={{ color: textColor }}
           >
-            Niv<span style={{ color: markColor }}>aran</span>
+            Common<span style={{ color: markColor }}>Ground</span>
           </span>
           <span
-            className="text-[0.55em] font-semibold uppercase tracking-widest mt-0.5"
-            style={{ color: badgeColor }}
+            className="text-[0.52em] font-bold uppercase tracking-wider mt-0.5 text-teal-700"
           >
             Community Demand Intelligence
           </span>
