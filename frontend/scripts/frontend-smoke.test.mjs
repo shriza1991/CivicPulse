@@ -13,7 +13,7 @@ test('internal evaluation is not mounted in the citizen shell', async () => {
 
 test('report submission has no fabricated offline case id or location', async () => {
   const store = await source('src/features/reporting/state/useReportingFlowStore.ts');
-  const intake = await source('src/pages/public/IntakePage.tsx');
+  const intake = await source('src/pages/IntakePage.tsx');
   assert.match(store, /latitude: null/);
   assert.match(store, /longitude: null/);
   assert.doesNotMatch(intake, /OFFLINE-\$\{Date\.now\(\)\}/);
@@ -35,15 +35,15 @@ test('API failures use an Error-compatible normalized type and the shared token 
 test('citizen intake integrates the Sarvam and Gemini voice-analysis endpoint', async () => {
   const queries = await source('src/api/queries.ts');
   const intake = await source('src/pages/IntakePage.tsx');
-  const voiceInput = await source('src/components/issue/VoiceDemandInput.tsx');
+  const voiceModal = await source('src/components/issue/VoiceRecorderModal.tsx');
 
   assert.match(queries, /apiClient\.post<VoiceAnalyzeResponse>\('\/voice\/analyze'/);
   assert.match(queries, /timeout: 60000/);
-  assert.match(intake, /VoiceDemandInput/);
-  assert.match(intake, /English interpretation:/);
+  assert.match(intake, /VoiceRecorderModal/);
+  assert.match(intake, /Voice Note Captured/);
   assert.match(intake, /useCallback\(\(coords/);
-  assert.match(voiceInput, /navigator\.mediaDevices\.getUserMedia/);
-  assert.match(voiceInput, /Read interpretation aloud/);
+  assert.match(voiceModal, /navigator\.mediaDevices\.getUserMedia/);
+  assert.match(voiceModal, /Sarvam Speech-to-Text & Gemini Demand Extraction/);
 });
 
 test('photo upload validation matches the JPEG and PNG backend contract', async () => {
@@ -57,3 +57,4 @@ test('intake surfaces normalized API errors instead of calling them network fail
   assert.match(intake, /err instanceof Error/);
   assert.match(intake, /\? err\.message/);
 });
+

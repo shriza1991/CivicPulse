@@ -5,7 +5,8 @@ from sqlmodel import Session, select
 from app.models.user import User, Role
 from app.models.cluster import Cluster
 from app.models.issue import Issue
-from app.models.action_draft import ActionDraft, ImpactSummary
+from app.models.action_draft import ActionDraft
+from app.models.impact_summary import ImpactSummary
 from app.models.escalation import Escalation
 from app.utils.security import hash_password
 
