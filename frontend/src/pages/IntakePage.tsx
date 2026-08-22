@@ -32,6 +32,7 @@ export const IntakePage: React.FC = () => {
 
   const [photo, setPhoto] = useState<File | null>(null);
   const [voiceAudio, setVoiceAudio] = useState<File | null>(null);
+  const [voiceAudioUrl, setVoiceAudioUrl] = useState<string | null>(null);
   const [voiceAnalysis, setVoiceAnalysis] = useState<VoiceAnalysisResult | null>(null);
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState<boolean>(false);
   const [photoSource, setPhotoSource] = useState<'camera' | 'gallery' | 'voice'>('gallery');
@@ -41,6 +42,19 @@ export const IntakePage: React.FC = () => {
   const [issueCategory, setIssueCategory] = useState<string>('road');
   const [severity, setSeverity] = useState<string>('medium');
   const [department, setDepartment] = useState<string>('Public Works');
+
+  // Manage voice audio URL object lifecycle
+  useEffect(() => {
+    if (voiceAudio) {
+      const url = URL.createObjectURL(voiceAudio);
+      setVoiceAudioUrl(url);
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setVoiceAudioUrl(null);
+    }
+  }, [voiceAudio]);
 
   const [isAiAnalyzing, setIsAiAnalyzing] = useState<boolean>(false);
   const [aiAnalysisComplete, setAiAnalysisComplete] = useState<boolean>(false);
@@ -206,13 +220,24 @@ export const IntakePage: React.FC = () => {
   const handleVoiceConfirmed = (audioFile: File, analysis: VoiceAnalysisResult) => {
     setVoiceAudio(audioFile);
     setVoiceAnalysis(analysis);
-    setPhotoSource('voice');
+    if (!photo) {
+      setPhotoSource('voice');
+    }
     
-    // Auto-fill user note with transcription
+    // Auto-fill or append user note with transcription
     const combinedNote = analysis.english_translation && analysis.english_translation !== analysis.transcript
       ? `${analysis.transcript} (English: ${analysis.english_translation})`
       : analysis.transcript;
-    setUserNote(combinedNote);
+      
+    setUserNote((prev) => {
+      if (!prev || !prev.trim()) {
+        return combinedNote;
+      }
+      if (prev.includes(analysis.transcript)) {
+        return prev;
+      }
+      return `${prev.trim()}\n\n[Voice Note]: ${combinedNote}`;
+    });
 
     if (analysis.issue_category) {
       setIssueCategory(analysis.issue_category.toLowerCase().replace(/\s+/g, '_'));
@@ -226,6 +251,12 @@ export const IntakePage: React.FC = () => {
     setAiAnalysisComplete(true);
     setAiAvailable(true);
     setAiConfidence(0.92);
+    setIsVoiceModalOpen(false);
+  };
+
+  const handleClearVoice = () => {
+    setVoiceAudio(null);
+    setVoiceAnalysis(null);
   };
 
   const handleLocationLocate = useCallback((coords: { lat: number; lng: number } | null) => {
@@ -335,6 +366,8 @@ export const IntakePage: React.FC = () => {
 
   const handleReset = () => {
     setPhoto(null);
+    setVoiceAudio(null);
+    setVoiceAnalysis(null);
     setCoordinates(null);
     setUserNote('');
     setIsSubmitting(false);
@@ -784,13 +817,6 @@ export const IntakePage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Voice Recording Modal */}
-                  <VoiceRecorderModal
-                    isOpen={isVoiceModalOpen}
-                    onClose={() => setIsVoiceModalOpen(false)}
-                    onConfirm={handleVoiceConfirmed}
-                  />
-
                   {/* WhatsApp alternative entry point — visible immediately in Step 1 */}
                   <WhatsAppReportBanner className="mt-3" />
 
@@ -832,24 +858,131 @@ export const IntakePage: React.FC = () => {
 
             {currentStep === 3 && (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-fade">
-                {/* Notes Input Area */}
-                <div className="lg:col-span-7 border border-slate-200 bg-white rounded-medium p-6 space-y-4 shadow-subtle">
-                  <div className="flex items-center gap-2 text-slate-700 border-b border-slate-100 pb-3">
-                    <FileText size={18} className="text-primary shrink-0" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Step 3: Demand Context</span>
+                {/* Notes & Voice Input Area */}
+                <div className="lg:col-span-7 border border-slate-200 bg-white rounded-medium p-6 space-y-5 shadow-subtle">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <FileText size={18} className="text-primary shrink-0" />
+                      <span className="text-xs font-bold uppercase tracking-wider">Step 3: Demand Context</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsVoiceModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200/80 rounded-small text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      <Mic size={13} className="text-teal-600" />
+                      <span>{voiceAnalysis ? 'Re-record Voice (STT)' : 'Speak Note (STT)'}</span>
+                    </button>
                   </div>
+
                   <p className="text-xs text-slate-500 leading-normal">
-                    Provide optional details about your community need (e.g. seasonal flooding duration, population affected, road danger) to ground the policy recommendation brief.
+                    Provide optional details about your community need (e.g. seasonal flooding duration, population affected, road danger) to ground the policy recommendation brief. You can type or use Sarvam Speech-to-Text in Hindi, Marathi, or English.
                   </p>
-                  
-                  <textarea
-                    rows={4}
-                    value={userNote}
-                    onChange={(e) => setUserNote(e.target.value)}
-                    placeholder="Describe specific community need or context..."
-                    className="w-full text-sm border border-slate-250 rounded-small px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none mt-2"
-                    maxLength={500}
-                  />
+
+                  {/* Step 3 Voice STT Assistant Card */}
+                  {!voiceAudio ? (
+                    <div className="p-4 bg-teal-50/50 border border-teal-200/70 rounded-medium flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2.5 bg-teal-600 text-white rounded-full shrink-0 shadow-xs">
+                          <Mic size={16} />
+                        </span>
+                        <div>
+                          <span className="text-xs font-bold text-slate-850 block">
+                            Speech-to-Text Voice Input (Sarvam AI)
+                          </span>
+                          <span className="text-[11px] text-slate-500 block leading-tight">
+                            Prefer speaking? Record in Hindi, Marathi, or English. Nivaran transcribes and structures context automatically.
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsVoiceModalOpen(true)}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-small shadow-xs transition-colors cursor-pointer shrink-0"
+                      >
+                        <Mic size={13} />
+                        <span>Speak Demand Context</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="p-4 bg-teal-50/70 border border-teal-200 rounded-medium space-y-3">
+                      <div className="flex items-center justify-between border-b border-teal-200/60 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="p-1.5 bg-teal-600 text-white rounded-full">
+                            <Mic size={13} />
+                          </span>
+                          <div>
+                            <span className="text-xs font-bold text-slate-800">
+                              Voice Note Attached ({voiceAnalysis?.detected_language || 'Recorded Audio'})
+                            </span>
+                            <span className="text-[10px] text-teal-750 font-semibold block">
+                              Transcribed via Sarvam AI STT & Structured with Gemini
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-[11px]">
+                          <button
+                            type="button"
+                            onClick={() => setIsVoiceModalOpen(true)}
+                            className="text-teal-700 hover:text-teal-900 font-bold underline cursor-pointer"
+                          >
+                            Re-record
+                          </button>
+                          <span className="text-slate-300">|</span>
+                          <button
+                            type="button"
+                            onClick={handleClearVoice}
+                            className="text-rose-600 hover:text-rose-800 font-bold underline cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+
+                      {voiceAudioUrl && (
+                        <div className="pt-0.5">
+                          <audio controls src={voiceAudioUrl} className="w-full h-8" />
+                        </div>
+                      )}
+
+                      {voiceAnalysis?.transcript && (
+                        <div className="space-y-1 text-xs">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                            Transcription:
+                          </span>
+                          <p className="text-xs italic text-slate-750 bg-white/90 p-2.5 rounded border border-teal-150 font-sans">
+                            "{voiceAnalysis.transcript}"
+                          </p>
+                          {voiceAnalysis.english_translation && voiceAnalysis.english_translation !== voiceAnalysis.transcript && (
+                            <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-200">
+                              <span className="font-semibold text-slate-700">English Interpretation:</span> {voiceAnalysis.english_translation}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Notes Textarea */}
+                  <div className="space-y-1.5 pt-1">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="demand-context-input" className="text-xs font-bold text-slate-700">
+                        Demand Context Notes & Observations
+                      </label>
+                      <span className="text-[10px] text-slate-400">
+                        {userNote.length}/500 chars
+                      </span>
+                    </div>
+                    <textarea
+                      id="demand-context-input"
+                      rows={4}
+                      value={userNote}
+                      onChange={(e) => setUserNote(e.target.value)}
+                      placeholder="Describe specific community need or context (e.g. duration of issue, affected households, road danger)..."
+                      className="w-full text-sm border border-slate-250 rounded-small px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none"
+                      maxLength={500}
+                    />
+                  </div>
                 </div>
 
                 {/* Final Case Review Summary */}
@@ -882,6 +1015,29 @@ export const IntakePage: React.FC = () => {
                         </span>
                       </div>
                     </div>
+
+                    {/* Voice Evidence Summary (if attached) */}
+                    {voiceAudio && (
+                      <div className="flex items-start gap-2.5 pt-3 border-t border-slate-100 text-slate-650">
+                        <Mic size={15} className="text-teal-600 shrink-0 mt-0.5" />
+                        <div className="leading-tight flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-slate-700 block">Voice Evidence Attached</span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 font-bold">
+                              {voiceAnalysis?.detected_language || 'Audio'}
+                            </span>
+                          </div>
+                          {voiceAnalysis?.transcript && (
+                            <span className="text-[10px] text-slate-500 italic block mt-1 line-clamp-2">
+                              "{voiceAnalysis.transcript}"
+                            </span>
+                          )}
+                          <span className="text-[9px] text-slate-400 block font-mono mt-0.5">
+                            {(voiceAudio.size / 1024).toFixed(0)} KB • Sarvam STT Grounded
+                          </span>
+                        </div>
+                      </div>
+                    )}
 
                     {/* AI Structured Auto-fill Details */}
                     <div className="pt-3 border-t border-slate-100 space-y-1.5 text-[11px]">
@@ -921,6 +1077,13 @@ export const IntakePage: React.FC = () => {
               </form>
             )}
           </div>
+
+          {/* Voice Recording Modal (Accessible globally across all steps) */}
+          <VoiceRecorderModal
+            isOpen={isVoiceModalOpen}
+            onClose={() => setIsVoiceModalOpen(false)}
+            onConfirm={handleVoiceConfirmed}
+          />
 
           {/* Stepper Navigation Buttons */}
           <div className="flex items-center justify-between pt-4 border-t border-slate-200 select-none">

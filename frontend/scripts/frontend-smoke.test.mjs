@@ -41,6 +41,10 @@ test('citizen intake integrates the Sarvam and Gemini voice-analysis endpoint', 
   assert.match(queries, /timeout: 60000/);
   assert.match(intake, /VoiceRecorderModal/);
   assert.match(intake, /Voice Note Captured/);
+  assert.match(intake, /Step 3: Demand Context/);
+  assert.match(intake, /Speak Note \(STT\)/);
+  assert.match(intake, /Speech-to-Text Voice Input \(Sarvam AI\)/);
+  assert.match(intake, /Voice Evidence Attached/);
   assert.match(intake, /useCallback\(\(coords/);
   assert.match(voiceModal, /navigator\.mediaDevices\.getUserMedia/);
   assert.match(voiceModal, /Sarvam Speech-to-Text & Gemini Demand Extraction/);

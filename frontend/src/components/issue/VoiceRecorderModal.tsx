@@ -419,10 +419,10 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
                 </div>
               </div>
 
-              {/* What CommonGround Understood */}
+              {/* What Nivaran Understood */}
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 text-xs">
                 <span className="font-bold text-[10px] text-slate-500 uppercase tracking-wider block">
-                  What CommonGround Understood (Demand Intelligence)
+                  What Nivaran Understood (Demand Intelligence)
                 </span>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
