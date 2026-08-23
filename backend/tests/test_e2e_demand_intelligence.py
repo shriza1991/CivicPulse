@@ -7,7 +7,7 @@ Tests the complete Nivaran Track 1 flow:
   3. Spatial correlation into Demand Hotspot Cluster
   4. Demographic, Infrastructure & Investment Data Fusion
   5. Deterministic Priority Engine Calculation & Breakdown
-  6. Grounded Gemini 2.5 Policy Advisor Brief Generation
+  6. Grounded Gemini 3.6 Policy Advisor Brief Generation
   7. Policymaker Review & Action Approval State Transition
 """
 import pytest

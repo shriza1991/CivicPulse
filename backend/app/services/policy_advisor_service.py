@@ -2,7 +2,7 @@
 policy_advisor_service.py — Gemini Policy Advisor Engine (Phase 7)
 
 Consumes fused cluster context (Phase 5) and deterministic priority breakdowns (Phase 6)
-to generate evidence-grounded, explainable policy briefs and dossiers using Gemini 2.5.
+to generate evidence-grounded, explainable policy briefs and dossiers using Gemini 3.6.
 """
 import json
 import logging
@@ -37,7 +37,7 @@ async def generate_policy_recommendation(
     created_by: Optional[str] = None
 ) -> PolicyRecommendation:
     """
-    Generates an evidence-grounded policy recommendation for a Demand Cluster using Gemini 2.5.
+    Generates an evidence-grounded policy recommendation for a Demand Cluster using Gemini 3.6.
     """
     if gemini_client is None:
         gemini_client = GeminiClient()
