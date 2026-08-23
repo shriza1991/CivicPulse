@@ -86,8 +86,15 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
         setAudioBlob(blob);
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
-        setRecordingState('recorded');
         stream.getTracks().forEach((track) => track.stop());
+
+        // Automatically transcribe and analyze voice demand immediately after finishing recording
+        if (blob.size > 0) {
+          processAudioAnalysis(blob);
+        } else {
+          setErrorMessage('No audio was captured. Please try speaking again.');
+          setRecordingState('idle');
+        }
       };
 
       recorder.start(250);
@@ -139,13 +146,14 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
     }
   };
 
-  const processAudioAnalysis = async () => {
-    if (!audioBlob) return;
+  const processAudioAnalysis = async (inputBlob?: Blob) => {
+    const targetBlob = inputBlob || audioBlob;
+    if (!targetBlob) return;
     setRecordingState('uploading');
     setErrorMessage(null);
 
-    const ext = audioBlob.type.includes('mp4') ? 'mp4' : 'webm';
-    const audioFile = new File([audioBlob], `demand_voice_${Date.now()}.${ext}`, { type: audioBlob.type });
+    const ext = targetBlob.type.includes('mp4') ? 'mp4' : 'webm';
+    const audioFile = new File([targetBlob], `demand_voice_${Date.now()}.${ext}`, { type: targetBlob.type });
 
     const formData = new FormData();
     formData.append('audio', audioFile);
@@ -186,7 +194,7 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
       }
     } catch (err: any) {
       console.error('Voice processing error:', err);
-      const detail = err.response?.data?.message || err.message || 'Failed to process voice request. You can re-record or type your need.';
+      const detail = err.response?.data?.message || err.message || 'Failed to process voice request. You can re-record or retry transcription.';
       setErrorMessage(detail);
       setRecordingState('recorded');
     }
@@ -332,11 +340,11 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
 
               <Button
                 variant="primary"
-                onClick={processAudioAnalysis}
+                onClick={() => processAudioAnalysis()}
                 className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5"
                 leadingIcon={<Sparkles className="w-4 h-4" />}
               >
-                Transcribe & Understand Demand
+                Retry Transcription & Demand Analysis
               </Button>
             </div>
           )}
@@ -411,10 +419,10 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
                 </div>
               </div>
 
-              {/* What CommonGround Understood */}
+              {/* What Nivaran Understood */}
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 text-xs">
                 <span className="font-bold text-[10px] text-slate-500 uppercase tracking-wider block">
-                  What CommonGround Understood (Demand Intelligence)
+                  What Nivaran Understood (Demand Intelligence)
                 </span>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
