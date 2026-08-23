@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 from sqlmodel import SQLModel
-from app.models import Cluster, Issue, ImpactSummary, ActionDraft, Escalation
+import app.models
 from app.config import settings
 
 # this is the Alembic Config object, which provides

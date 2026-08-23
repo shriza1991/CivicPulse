@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     WHATSAPP_ENABLED: bool = False
     TWILIO_ACCOUNT_SID: str = ""
     TWILIO_AUTH_TOKEN: str = ""
-    TWILIO_WHATSAPP_NUMBER: str = ""
+    TWILIO_WHATSAPP_NUMBER: str = "whatsapp:+14155238886"
     # Sarvam AI Configuration
     SARVAM_API_KEY: str = ""
 
