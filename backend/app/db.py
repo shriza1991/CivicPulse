@@ -43,6 +43,10 @@ def init_db():
         Department, OfficerProfile, CaseAssignment, CaseTransition, RepairVerification, ResolutionRecord,
         Notification, NotificationPreference, NotificationDelivery, Announcement
     )
+    import os
+    logger.warning(
+        f"INIT_DB pid={os.getpid()} ppid={os.getppid()}"
+    )
     SQLModel.metadata.create_all(engine)
     logger.info("Database tables initialized successfully.")
 

@@ -54,20 +54,41 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Allowed CORS Origins for development and production deployments
+allowed_origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://commonground-tawny.vercel.app",
+    "https://commonground-tawny.vercel.app/",
+    "https://civic-pulse-tawny.vercel.app",
+    "https://civic-pulse-tawny.vercel.app/",
+    "https://commonground.vercel.app",
+    "https://commonground.vercel.app/",
+]
+
+if settings.FRONTEND_ORIGIN:
+    for origin in settings.FRONTEND_ORIGIN.split(","):
+        cleaned = origin.strip()
+        if cleaned:
+            if cleaned not in allowed_origins:
+                allowed_origins.append(cleaned)
+            no_slash = cleaned.rstrip("/")
+            if no_slash and no_slash not in allowed_origins:
+                allowed_origins.append(no_slash)
+
+# CORSMiddleware registered before routes
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Production Security, Rate Limiting & Structured Logging Middleware
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(LoggingMiddleware)
-
-# CORS Lockdown to frontend origin(s)
-origins = [org.strip() for org in settings.FRONTEND_ORIGIN.split(",") if org.strip()]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Accept", "Authorization", "Content-Type", "Idempotency-Key", "X-Request-ID"],
-)
 
 # Mount static files with deterministic absolute pathing
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
