@@ -226,7 +226,7 @@ def get_public_config():
     """Expose non-sensitive runtime feature flags and public configuration to frontend."""
     return {
         "whatsapp_enabled": settings.WHATSAPP_ENABLED,
-        "whatsapp_number": settings.TWILIO_WHATSAPP_NUMBER if settings.WHATSAPP_ENABLED else "",
+        "whatsapp_number": getattr(settings, "TWILIO_WHATSAPP_NUMBER", "") if settings.WHATSAPP_ENABLED else "",
         "environment": settings.ENVIRONMENT,
         "gemini_model": settings.GEMINI_MODEL,
         "escalation_threshold": settings.threshold

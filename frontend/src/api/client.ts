@@ -12,7 +12,10 @@ export class ApiError extends Error {
   }
 }
 
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:8000/api' : '/api');
+const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:8000/api' : '/api');
+const VITE_API_BASE_URL = rawApiBaseUrl.endsWith('/api')
+  ? rawApiBaseUrl
+  : `${rawApiBaseUrl.replace(/\/+$/, '')}/api`;
 
 export const apiClient = axios.create({
   baseURL: VITE_API_BASE_URL,
