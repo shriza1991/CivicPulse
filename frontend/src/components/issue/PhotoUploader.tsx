@@ -2,8 +2,12 @@ import React, { useState, useRef } from 'react';
 import { Camera, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Client-side image resizing helper (resizes to max 1920px dimensions, keeping ratio)
-const resizeImage = (file: File, maxWidth = 1920, maxHeight = 1920): Promise<File> => {
+const MIN_IMAGE_DIMENSION = 600;
+const MAX_IMAGE_DIMENSION = 2048;
+
+// Normalizes any supported source resolution before the evidence gate sees it.
+// Upscaling makes small camera images processable; it cannot create missing visual detail.
+const normalizeImage = (file: File): Promise<File> => {
   return new Promise((resolve) => {
     if (!file.type.startsWith('image/')) {
       resolve(file);
@@ -15,19 +19,20 @@ const resizeImage = (file: File, maxWidth = 1920, maxHeight = 1920): Promise<Fil
       const img = new Image();
       img.src = event.target?.result as string;
       img.onload = () => {
-        let width = img.width;
-        let height = img.height;
-        if (width <= maxWidth && height <= maxHeight) {
-          resolve(file);
-          return;
+        const sourceWidth = img.width;
+        const sourceHeight = img.height;
+        const shortestSide = Math.min(sourceWidth, sourceHeight);
+        const longestSide = Math.max(sourceWidth, sourceHeight);
+
+        let scale = shortestSide < MIN_IMAGE_DIMENSION
+          ? MIN_IMAGE_DIMENSION / Math.max(shortestSide, 1)
+          : 1;
+        if (longestSide * scale > MAX_IMAGE_DIMENSION) {
+          scale = MAX_IMAGE_DIMENSION / longestSide;
         }
-        if (width > height) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
-        } else {
-          width = Math.round((width * maxHeight) / height);
-          height = maxHeight;
-        }
+
+        const width = Math.max(1, Math.round(sourceWidth * scale));
+        const height = Math.max(1, Math.round(sourceHeight * scale));
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -43,9 +48,10 @@ const resizeImage = (file: File, maxWidth = 1920, maxHeight = 1920): Promise<Fil
               resolve(file);
               return;
             }
-            resolve(new File([blob], file.name, { type: file.type || 'image/jpeg', lastModified: Date.now() }));
+            const normalizedName = file.name.replace(/\.[^.]+$/, '') || 'community-demand';
+            resolve(new File([blob], `${normalizedName}.jpg`, { type: 'image/jpeg', lastModified: Date.now() }));
           },
-          file.type || 'image/jpeg',
+          'image/jpeg',
           0.85
         );
       };
@@ -70,25 +76,25 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
   const validateAndProcessFile = async (file: File, source: 'camera' | 'gallery') => {
     setError(null);
 
-    // Keep client validation aligned with the backend Stage 0 intake contract.
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    // The backend normalizer accepts these common community-capture formats.
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      setError('Invalid file type. Please upload a JPG or PNG image.');
+      setError('Unsupported image format. Please upload a JPG, PNG, or WebP image.');
       return;
     }
 
-    // Validate size (15MB max)
-    const maxBytes = 15 * 1024 * 1024;
+    // Keep the client limit aligned with the backend's 25MB evidence limit.
+    const maxBytes = 25 * 1024 * 1024;
     if (file.size > maxBytes) {
-      setError('File is too large. Maximum allowed size is 15MB.');
+      setError('File is too large. Maximum allowed size is 25MB.');
       return;
     }
 
     try {
       setResizing(true);
-      const processedFile = await resizeImage(file);
+      const processedFile = await normalizeImage(file);
       onCapture(processedFile, source);
-    } catch (err) {
+    } catch {
       setError('Error processing image. Please try again.');
     } finally {
       setResizing(false);
@@ -126,7 +132,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
       <input
         ref={galleryInputRef}
         type="file"
-        accept="image/png, image/jpeg, image/jpg"
+        accept="image/png, image/jpeg, image/jpg, image/webp"
         className="hidden"
         onChange={(e) => handleFileChange(e, 'gallery')}
         disabled={resizing}
@@ -134,7 +140,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
       <input
         ref={cameraInputRef}
         type="file"
-        accept="image/png, image/jpeg, image/jpg"
+        accept="image/png, image/jpeg, image/jpg, image/webp"
         // @ts-ignore
         capture="environment"
         className="hidden"
@@ -205,7 +211,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onCapture, classNa
               Or drag and drop photo file here
             </p>
             <p className="text-[10px] text-slate-400 font-normal font-sans">
-              PNG, JPG, or JPEG up to 15MB
+              Any resolution · JPG, PNG, or WebP up to 25MB · auto-optimized before review
             </p>
           </div>
         )}

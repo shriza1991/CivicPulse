@@ -125,12 +125,18 @@ async def create_issue_from_bytes(
     """
     _validator = validator or validate_evidence_photo
     # ------------------------------------------------------------------
+    # 0. Auto-fix and normalize image of any resolution/format
+    # ------------------------------------------------------------------
+    from app.services.evidence_validation import auto_fix_and_normalize_image
+    photo_bytes, mime_type, _ = auto_fix_and_normalize_image(photo_bytes, mime_type)
+
+    # ------------------------------------------------------------------
     # 1. Cheap validations (no AI cost)
     # ------------------------------------------------------------------
-    if mime_type not in ("image/jpeg", "image/png"):
+    if mime_type not in ("image/jpeg", "image/png", "image/webp"):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"error": "validation_error", "fields": {"photo": "Must be jpg or png"}},
+            detail={"error": "validation_error", "fields": {"photo": "Must be a valid image (JPEG, PNG, WEBP)"}},
         )
 
     if not (-90.0 <= latitude <= 90.0) or not (-180.0 <= longitude <= 180.0):

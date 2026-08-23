@@ -50,10 +50,12 @@ test('citizen intake integrates the Sarvam and Gemini voice-analysis endpoint', 
   assert.match(voiceModal, /Sarvam Speech-to-Text & Gemini Demand Extraction/);
 });
 
-test('photo upload validation matches the JPEG and PNG backend contract', async () => {
+test('photo upload normalizes supported images before the evidence gate', async () => {
   const uploader = await source('src/components/issue/PhotoUploader.tsx');
-  assert.match(uploader, /const validTypes = \['image\/jpeg', 'image\/jpg', 'image\/png'\]/);
-  assert.doesNotMatch(uploader, /image\/webp/);
+  assert.match(uploader, /MIN_IMAGE_DIMENSION = 600/);
+  assert.match(uploader, /MAX_IMAGE_DIMENSION = 2048/);
+  assert.match(uploader, /const validTypes = \['image\/jpeg', 'image\/jpg', 'image\/png', 'image\/webp'\]/);
+  assert.match(uploader, /'image\/jpeg'/);
 });
 
 test('intake surfaces normalized API errors instead of calling them network failures', async () => {
@@ -61,4 +63,3 @@ test('intake surfaces normalized API errors instead of calling them network fail
   assert.match(intake, /err instanceof Error/);
   assert.match(intake, /\? err\.message/);
 });
-

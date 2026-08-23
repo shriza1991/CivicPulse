@@ -33,18 +33,21 @@ def validate_magic_bytes(content: bytes) -> str:
 
 def process_and_optimize_image(
     image_bytes: bytes,
+    min_dimension: int = 600,
     max_dimension: int = 2048,
-    quality: int = 80
+    quality: int = 85
 ) -> Tuple[bytes, str, Optional[Tuple[float, float]]]:
     """
     Validates magic bytes, extracts GPS EXIF coordinates if available,
-    resizes large images, compresses quality, and strips sensitive camera EXIF.
+    auto-fixes resolution (upscales low-resolution, downscales high-resolution),
+    compresses quality, and strips sensitive camera EXIF.
     Returns (optimized_bytes, mime_type, gps_coords_tuple_or_none).
     """
     mime_type = validate_magic_bytes(image_bytes)
     gps_coords = None
 
     try:
+        from PIL import ImageEnhance
         img = Image.open(io.BytesIO(image_bytes))
         
         # Extract EXIF GPS if present
@@ -56,19 +59,35 @@ def process_and_optimize_image(
         img = ImageOps.exif_transpose(img)
 
         # Convert palette/RGBA to RGB for JPEG saving
-        if img.mode in ("RGBA", "P"):
+        if img.mode in ("RGBA", "LA", "P"):
+            img_rgba = img.convert("RGBA")
+            bg = Image.new("RGB", img_rgba.size, (255, 255, 255))
+            if len(img_rgba.split()) >= 4:
+                bg.paste(img_rgba, mask=img_rgba.split()[3])
+            else:
+                bg.paste(img_rgba)
+            img = bg
+        elif img.mode != "RGB":
             img = img.convert("RGB")
 
-        # Resize if dimensions exceed max_dimension
+        # Auto-fix resolution
         w, h = img.size
-        if w > max_dimension or h > max_dimension:
-            if w > h:
-                new_w = max_dimension
-                new_h = int(h * (max_dimension / w))
-            else:
-                new_h = max_dimension
-                new_w = int(w * (max_dimension / h))
-            img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+        if w > 0 and h > 0:
+            if w < min_dimension or h < min_dimension:
+                scale = max(min_dimension / max(w, 1), min_dimension / max(h, 1))
+                new_w = max(int(round(w * scale)), min_dimension)
+                new_h = max(int(round(h * scale)), min_dim := min_dimension)
+                img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+                try:
+                    enhancer = ImageEnhance.Sharpness(img)
+                    img = enhancer.enhance(1.25)
+                except Exception:
+                    pass
+            elif w > max_dimension or h > max_dimension:
+                scale = max_dimension / max(w, h)
+                new_w = max(int(round(w * scale)), 1)
+                new_h = max(int(round(h * scale)), 1)
+                img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
         # Save optimized image without EXIF payload (EXIF stripped)
         output_buffer = io.BytesIO()

@@ -5,7 +5,7 @@ import threading
 from enum import Enum
 from typing import Optional, Dict
 from pydantic import BaseModel, Field
-from PIL import Image, ImageFilter, ImageStat
+from PIL import Image, ImageFilter, ImageStat, ImageOps, ImageEnhance
 from app.services.gemini_client import GeminiClient
 
 class ValidationFailure(str, Enum):
@@ -77,6 +77,89 @@ class MetricsTracker:
 
 metrics_tracker = MetricsTracker()
 
+def auto_fix_and_normalize_image(
+    photo_bytes: bytes,
+    mime_type: str = "image/jpeg",
+    min_dim: int = 600,
+    max_dim: int = 2048,
+    target_quality: int = 88,
+) -> tuple[bytes, str, bool]:
+    """
+    Self-healing image preprocessor:
+    Accepts images of any resolution, format, or condition.
+    - Decodes image (JPEG, PNG, WEBP, BMP, etc.)
+    - Transposes EXIF orientation
+    - Converts mode to RGB (compositing alpha on white background if RGBA/transparent)
+    - Auto-upscales low-resolution images (< min_dim) to >= min_dim with LANCZOS + subtle edge sharpening
+    - Auto-downscales high-resolution images (> max_dim) to <= max_dim with LANCZOS
+    - Auto-enhances underexposed/dark images
+    - Returns (fixed_bytes, 'image/jpeg', was_fixed)
+    """
+    if not photo_bytes:
+        return photo_bytes, mime_type, False
+
+    try:
+        with Image.open(io.BytesIO(photo_bytes)) as img:
+            # Auto-orient based on EXIF orientation tag
+            img = ImageOps.exif_transpose(img)
+
+            # Handle alpha transparency / palettes
+            if img.mode in ("RGBA", "LA", "P"):
+                img_rgba = img.convert("RGBA")
+                bg = Image.new("RGB", img_rgba.size, (255, 255, 255))
+                if len(img_rgba.split()) >= 4:
+                    bg.paste(img_rgba, mask=img_rgba.split()[3])
+                else:
+                    bg.paste(img_rgba)
+                img = bg
+            elif img.mode != "RGB":
+                img = img.convert("RGB")
+
+            w, h = img.size
+            if w <= 0 or h <= 0:
+                return photo_bytes, mime_type, False
+
+            # Resolution self-healing:
+            # If smaller than min_dim in either dimension, upscale while preserving aspect ratio
+            if w < min_dim or h < min_dim:
+                scale = max(min_dim / max(w, 1), min_dim / max(h, 1))
+                new_w = max(int(round(w * scale)), min_dim)
+                new_h = max(int(round(h * scale)), min_dim)
+                img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+                # Apply subtle sharpening to preserve edge clarity after upscaling
+                try:
+                    enhancer = ImageEnhance.Sharpness(img)
+                    img = enhancer.enhance(1.25)
+                except Exception:
+                    pass
+            elif w > max_dim or h > max_dim:
+                scale = max_dim / max(w, h)
+                new_w = max(int(round(w * scale)), 1)
+                new_h = max(int(round(h * scale)), 1)
+                img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+
+            # Adaptive lighting/contrast enhancement if image is too dark
+            try:
+                gray = img.convert("L")
+                stat = ImageStat.Stat(gray)
+                mean_b = stat.mean[0]
+                if mean_b < 35:
+                    bright_factor = min(2.2, 65.0 / max(mean_b, 5.0))
+                    img = ImageEnhance.Brightness(img).enhance(bright_factor)
+                    img = ImageEnhance.Contrast(img).enhance(1.15)
+                elif mean_b > 240:
+                    img = ImageEnhance.Brightness(img).enhance(0.9)
+            except Exception:
+                pass
+
+            buf = io.BytesIO()
+            img.save(buf, format="JPEG", quality=target_quality, optimize=True)
+            return buf.getvalue(), "image/jpeg", True
+
+    except Exception:
+        # If parsing completely fails (e.g. non-image binary payload), return original
+        return photo_bytes, mime_type, False
+
 def calculate_dhash_from_bytes(photo_bytes: bytes, hash_size: int = 8) -> str:
     try:
         with Image.open(io.BytesIO(photo_bytes)) as img:
@@ -97,82 +180,10 @@ def calculate_dhash_from_bytes(photo_bytes: bytes, hash_size: int = 8) -> str:
         return ""
 
 def run_cheap_validations(photo_bytes: bytes, mime_type: str) -> tuple[bool, Optional[ValidationFailure], Optional[Stage0Checks], str]:
-    # 1. MIME check
-    if mime_type not in ["image/jpeg", "image/png"]:
-        return (
-            False,
-            ValidationFailure.LOW_QUALITY,
-            Stage0Checks(file=False, quality=False, scene=False, infrastructure=False, issue=False),
-            "Only JPEG and PNG images are supported."
-        )
-
-    # 2. File size checks
-    file_size_kb = len(photo_bytes) / 1024
-    if file_size_kb < 5:
-        return (
-            False,
-            ValidationFailure.LOW_QUALITY,
-            Stage0Checks(file=False, quality=False, scene=False, infrastructure=False, issue=False),
-            "The uploaded file is too small to be a valid photo."
-        )
-    if file_size_kb > 10 * 1024:
-        return (
-            False,
-            ValidationFailure.LOW_QUALITY,
-            Stage0Checks(file=False, quality=False, scene=False, infrastructure=False, issue=False),
-            "The uploaded file exceeds the 10MB size limit."
-        )
-
-    # 3. Resolution, Brightness & Blur checks
+    # 1. Image decodability verification
     try:
         with Image.open(io.BytesIO(photo_bytes)) as img:
-            width, height = img.size
-            if width < 300 or height < 300:
-                return (
-                    False,
-                    ValidationFailure.LOW_QUALITY,
-                    Stage0Checks(file=True, quality=False, scene=False, infrastructure=False, issue=False),
-                    f"Image resolution is too low ({width}x{height}px). Minimum 300x300px required."
-                )
-            if width > 4096 or height > 4096:
-                return (
-                    False,
-                    ValidationFailure.LOW_QUALITY,
-                    Stage0Checks(file=True, quality=False, scene=False, infrastructure=False, issue=False),
-                    f"Image resolution is too high ({width}x{height}px). Maximum 4096x4096px allowed."
-                )
-
-            # Brightness check
-            gray_img = img.convert('L')
-            stat = ImageStat.Stat(gray_img)
-            mean_brightness = stat.mean[0]
-            if mean_brightness < 15:
-                return (
-                    False,
-                    ValidationFailure.LOW_QUALITY,
-                    Stage0Checks(file=True, quality=False, scene=False, infrastructure=False, issue=False),
-                    f"Image is too dark (brightness value: {mean_brightness:.1f})."
-                )
-            if mean_brightness > 245:
-                return (
-                    False,
-                    ValidationFailure.LOW_QUALITY,
-                    Stage0Checks(file=True, quality=False, scene=False, infrastructure=False, issue=False),
-                    f"Image is overexposed (brightness value: {mean_brightness:.1f})."
-                )
-
-            # Blur check
-            edge_img = gray_img.filter(ImageFilter.FIND_EDGES)
-            edge_stat = ImageStat.Stat(edge_img)
-            edge_std_dev = edge_stat.stddev[0]
-            if edge_std_dev < 3.0:
-                return (
-                    False,
-                    ValidationFailure.LOW_QUALITY,
-                    Stage0Checks(file=True, quality=False, scene=False, infrastructure=False, issue=False),
-                    f"Image is too blurry (edge value: {edge_std_dev:.2f})."
-                )
-
+            img.verify()
     except Exception as e:
         return (
             False,
@@ -181,12 +192,22 @@ def run_cheap_validations(photo_bytes: bytes, mime_type: str) -> tuple[bool, Opt
             f"Failed to parse image file: {str(e)}"
         )
 
-    # If cheap checks pass, quality is True
+    # 2. Upper bound file size check (25MB max to prevent memory exhaustion)
+    file_size_mb = len(photo_bytes) / (1024 * 1024)
+    if file_size_mb > 25.0:
+        return (
+            False,
+            ValidationFailure.LOW_QUALITY,
+            Stage0Checks(file=False, quality=False, scene=False, infrastructure=False, issue=False),
+            "The uploaded file exceeds the 25MB size limit."
+        )
+
+    # Valid image format and quality (resolution is automatically self-healed)
     return (
         True,
         None,
         Stage0Checks(file=True, quality=True, scene=False, infrastructure=False, issue=False),
-        "Cheap validations passed."
+        "Image validated and resolution auto-optimized."
     )
 
 async def validate_evidence_photo(
@@ -196,6 +217,12 @@ async def validate_evidence_photo(
 ) -> Stage0Result:
     start_time = time.time()
     
+    # 0. Auto-fix and normalize image of any resolution
+    fixed_bytes, resolved_mime, was_fixed = auto_fix_and_normalize_image(photo_bytes, mime_type)
+    if was_fixed:
+        photo_bytes = fixed_bytes
+        mime_type = resolved_mime
+
     # 1. Run cheap validations
     success, failure_type, checks, message = run_cheap_validations(photo_bytes, mime_type)
     if not success:
@@ -203,10 +230,10 @@ async def validate_evidence_photo(
             accepted=False,
             failure=failure_type,
             confidence=1.0,
-            detected_object="Invalid File / Low Quality",
+            detected_object="Invalid File / Corrupt Media",
             checks=checks,
             message=message,
-            suggestion="Please upload a high-quality, clear image in JPEG or PNG format."
+            suggestion="Please upload a valid image in JPEG, PNG, or WEBP format."
         )
         latency = (time.time() - start_time) * 1000
         metrics_tracker.track_upload(accepted=False, cached=False, latency_ms=latency)
