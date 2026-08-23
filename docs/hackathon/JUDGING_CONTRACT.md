@@ -17,7 +17,7 @@
 ### Criterion 2: AI / Technical Execution (25%)
 - **Official Focus**: Deep, meaningful Google AI integration combined with sound engineering architecture.
 - **Nivaran Evidence**:
-  - **Google Gemini 2.5 Flash**: Multimodal visual evidence verification, structured demand extraction, and evidence-grounded policy reasoning with schema enforcement.
+  - **Google Gemini 3.6 Flash**: Multimodal visual evidence verification, structured demand extraction, and evidence-grounded policy reasoning with schema enforcement.
   - **Sarvam AI**: Multilingual voice speech-to-text for Indian regional languages.
   - **Deterministic Engine**: Mathematical PostGIS spatial clustering and demographic data fusion — LLMs are never used to fabricate scores or numbers.
   - **Full Test Suite**: 108 backend tests (100% passing) and complete frontend smoke suite.

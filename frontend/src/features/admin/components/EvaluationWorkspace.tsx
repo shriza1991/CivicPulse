@@ -17,9 +17,9 @@ const FULL_E2E_SIMULATION_STEPS = [
   },
   {
     id: 'step-2',
-    role: 'Google Gemini 2.5',
+    role: 'Google Gemini 3.6',
     title: '2. Multimodal Demand Understanding & Category Extraction',
-    description: 'Gemini 2.5 processes spoken transcript and photo evidence, structuring need into category, urgency, and affected community scope.',
+    description: 'Gemini 3.6 processes spoken transcript and photo evidence, structuring need into category, urgency, and affected community scope.',
     icon: ShieldCheck,
     statusBadge: 'AI PERCEPTION: 96% CONFIDENCE',
     details: 'Extracted: Category=Drainage/Stormwater, Subcategory=Monsoon Waterlogging, Estimated Beneficiaries=4,500 residents. Evidence Trust Score=0.92.',
@@ -58,7 +58,7 @@ const FULL_E2E_SIMULATION_STEPS = [
   {
     id: 'step-6',
     role: 'Gemini Policy Advisor',
-    title: '6. Grounded Gemini 2.5 Policy & Budget Recommendation',
+    title: '6. Grounded Gemini 3.6 Policy & Budget Recommendation',
     description: 'Gemini generates evidence-grounded policy intervention brief with estimated CAPEX, ward scheme mapping, and execution timelines.',
     icon: CheckCircle,
     statusBadge: 'POLICY BRIEF GENERATED',

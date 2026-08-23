@@ -33,7 +33,7 @@ Before modifying code or product behavior, every agent MUST consult documents in
 1. **India-First**: The primary geography, data, language, and demo context is **India** (Ward → District → State → National). Cross-border portability (BRICS) is demonstrated via modular adapters (`country_adapters.py`).
 2. **Hero Object**: The hero object is a **Demand Hotspot / Cluster**, not an individual complaint ticket.
 3. **Deterministic Truth**: All mathematical metrics, counts, distances, aggregates, and priority scores must be computed deterministically. Never ask an LLM to invent scores or stats.
-4. **Google AI Integration**: Google Gemini 2.5 is used for structured demand understanding, multimodal verification, and evidence-grounded policy brief reasoning.
+4. **Google AI Integration**: Google Gemini 3.6 is used for structured demand understanding, multimodal verification, and evidence-grounded policy brief reasoning.
 5. **Multilingual Voice**: Spoken citizen demands in Indian languages (Hindi, Marathi, English) are transcribed via Sarvam AI STT.
 6. **Human in the Loop**: Final policy decisions and infrastructure spending actions remain strictly under human authority.
 7. **Surgical Changes**: No feature for feature's sake. Test every change before declaring complete.

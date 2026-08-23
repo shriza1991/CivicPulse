@@ -55,8 +55,8 @@ from app.services.agent_3_impact import analyze_cluster_impact
 from app.services.agent_4_action_generator import generate_action_drafts
 from app.services.agent_5_escalation import escalate_draft
 
-# Use gemini-2.5-flash which is the only model with remaining quota
-settings.GEMINI_MODEL = "gemini-2.5-flash"
+# Use gemini-3.6-flash which is the primary model
+settings.GEMINI_MODEL = "gemini-3.6-flash"
 current_key_idx = 0
 
 def rotate_api_key():
@@ -85,7 +85,7 @@ async def run_with_retry(async_func, *args, **kwargs):
             else:
                 # Other error (DB or model schema validation error)
                 raise e
-    raise RuntimeError("Max retries exceeded with all available keys on gemini-2.5-flash.")
+    raise RuntimeError("Max retries exceeded with all available keys on gemini-3.6-flash.")
 
 async def run_e2e():
     print("=================== nivaran E2E Execution ===================")

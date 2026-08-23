@@ -375,7 +375,7 @@ export const VoiceRecorderModal: React.FC<VoiceRecorderModalProps> = ({
                     ) : (
                       <span className="w-4 h-4 rounded-full border border-slate-300" />
                     )}
-                    <span className="text-slate-800 font-medium">Google Gemini 2.5 Structured Demand Extraction</span>
+                    <span className="text-slate-800 font-medium">Google Gemini 3.6 Structured Demand Extraction</span>
                   </div>
                 </div>
               </div>

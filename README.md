@@ -11,7 +11,7 @@ It transforms fragmented citizen voice, photo, and text reports into verified **
 ## Key Capabilities
 
 - 🎙️ **Multilingual Citizen Voice Ingestion**: Speak community infrastructure needs in Hindi, Marathi, English, or regional Indian languages via Sarvam AI Speech-to-Text.
-- 📸 **Visual Verification & Demand Extraction**: Google Gemini 2.5 performs multimodal verification of photographic evidence and extracts structured demand parameters.
+- 📸 **Visual Verification & Demand Extraction**: Google Gemini 3.6 performs multimodal verification of photographic evidence and extracts structured demand parameters.
 - 📍 **Spatial & Semantic Clustering**: Automatically aggregates related citizen reports into localized demand hotspots (150m–500m radii).
 - 📊 **Indian Data Fusion & Prioritization**: Enriches hotspots with Census of India demographic metrics (population density, poverty rates, vulnerability indices) and public asset condition ratings.
 - ⚖️ **Deterministic 0–100 Priority Engine**: Mathematical, transparent scoring formula that eliminates LLM numerical hallucinations.
@@ -51,7 +51,7 @@ Citizen Voice / Text / Photo / WhatsApp
 | Layer | Technology | Purpose |
 |---|---|---|
 | **Voice STT** | Sarvam AI | Indian regional language speech-to-text |
-| **Multimodal AI & Reasoning** | Google Gemini 2.5 Flash | Multimodal verification, structured demand extraction, policy reasoning |
+| **Multimodal AI & Reasoning** | Google Gemini 3.6 Flash | Multimodal verification, structured demand extraction, policy reasoning |
 | **Data & Priority Engine** | Python / SQLModel / PostGIS | Spatial clustering, demographic data fusion, deterministic scoring |
 | **Backend API** | FastAPI / Uvicorn | High-performance asynchronous REST API |
 | **Frontend SPA** | React 19 / TypeScript / Vite / TailwindCSS | Responsive policymaker console & citizen intake |

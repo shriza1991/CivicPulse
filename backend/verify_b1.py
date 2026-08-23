@@ -50,7 +50,7 @@ async def main():
     print(f"System Instruction: {system_instruction}")
     print(f"Prompt: {prompt}")
     
-    models = ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-2.5-flash", "gemini-3.5-flash"]
+    models = ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite"]
     success = False
     
     # Try keys and models sequentially

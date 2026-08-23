@@ -325,6 +325,6 @@ def settings_model() -> str:
         from app.config import settings
         return settings.GEMINI_MODEL
     except (ImportError, AttributeError):
-        return os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+        return os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 
 

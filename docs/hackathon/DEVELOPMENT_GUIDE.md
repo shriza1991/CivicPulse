@@ -48,7 +48,7 @@
                                               │
                                               ▼
                                ┌─────────────────────────────┐
-                               │ Gemini 2.5 Policy Reasoning │
+                               │ Gemini 3.6 Policy Reasoning │
                                │ • Structured Briefs         │
                                │ • Funding & Risk Synthesis  │
                                └──────────────┬──────────────┘

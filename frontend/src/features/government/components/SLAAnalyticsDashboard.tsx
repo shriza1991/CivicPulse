@@ -41,7 +41,7 @@ export const SLAAnalyticsDashboard: React.FC = () => {
           <div className="flex items-start gap-2 bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
             <span className="p-1 rounded bg-teal-950 text-teal-300 shrink-0"><Sparkles className="w-4 h-4" /></span>
             <div>
-              <strong className="block text-white text-[11px]">2. Google Gemini 2.5</strong>
+              <strong className="block text-white text-[11px]">2. Google Gemini 3.6</strong>
               <span className="text-[10px] text-slate-300">Multimodal perception & policy brief reasoning</span>
             </div>
           </div>
@@ -89,7 +89,7 @@ export const SLAAnalyticsDashboard: React.FC = () => {
         <MetricCard
           title="Policy Briefs Ready"
           metricValue="8 Briefs"
-          methodologyNote="Grounded Gemini 2.5 recommendations awaiting planner sign-off."
+          methodologyNote="Grounded Gemini 3.6 recommendations awaiting planner sign-off."
         />
       </div>
 

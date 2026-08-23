@@ -450,7 +450,7 @@ export const DemandHotspotWorkspace: React.FC = () => {
                 <div className="flex items-center justify-between border-b border-primary-200/60 pb-3">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-primary-700" />
-                    <h3 className="font-bold text-neutral-900 text-base">Gemini 2.5 Policy Advisor Brief</h3>
+                    <h3 className="font-bold text-neutral-900 text-base">Gemini 3.6 Policy Advisor Brief</h3>
                   </div>
                   {policyBrief && (
                     <StatusChip
@@ -547,7 +547,7 @@ export const DemandHotspotWorkspace: React.FC = () => {
                   <div className="flex items-start gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
                     <div>
-                      <strong className="text-slate-800">Demand Understanding:</strong> Google Gemini 2.5 Flash
+                      <strong className="text-slate-800">Demand Understanding:</strong> Google Gemini 3.6 Flash
                     </div>
                   </div>
                   <div className="flex items-start gap-1.5">
@@ -559,7 +559,7 @@ export const DemandHotspotWorkspace: React.FC = () => {
                   <div className="flex items-start gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0" />
                     <div>
-                      <strong className="text-slate-800">Policy Reasoning:</strong> Google Gemini 2.5 Policy Advisor
+                      <strong className="text-slate-800">Policy Reasoning:</strong> Google Gemini 3.6 Policy Advisor
                     </div>
                   </div>
                 </div>

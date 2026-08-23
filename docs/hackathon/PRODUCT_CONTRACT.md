@@ -49,9 +49,9 @@ Citizen Voice / Text / Messaging / Photo
 | Subsystem | Technology | Responsibility | Guarantee |
 |---|---|---|---|
 | **Multilingual Voice Intake** | Sarvam AI STT | Ingest spoken citizen demand in Hindi, Marathi, English, and regional languages | Fast, accurate speech-to-text without manual typing barrier |
-| **Demand Understanding** | Google Gemini 2.5 | Extract structured categories, severity signals, and problem descriptions | Multimodal visual verification & language classification |
+| **Demand Understanding** | Google Gemini 3.6 | Extract structured categories, severity signals, and problem descriptions | Multimodal visual verification & language classification |
 | **Data Fusion & Priority** | Nivaran Deterministic Engine | Calculate spatial clusters, demographic vulnerability weights, and numerical priority scores | 100% reproducible mathematical scoring (never fabricated by an LLM) |
-| **Policy Reasoning** | Google Gemini 2.5 | Synthesize policy briefs, cite specific evidence, identify funding pathways, and evaluate risks | Schema-enforced structured outputs with transparent provenance |
+| **Policy Reasoning** | Google Gemini 3.6 | Synthesize policy briefs, cite specific evidence, identify funding pathways, and evaluate risks | Schema-enforced structured outputs with transparent provenance |
 | **Final Authority** | Human Decision-Maker | Approve, modify, or reject proposed infrastructure interventions | Human oversight remains mandatory |
 
 ---
